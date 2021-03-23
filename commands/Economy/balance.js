@@ -11,11 +11,11 @@ class Credits extends Command {
 
 	constructor (client) {
 		super(client, {
-			name: "money",
+			name: "balance",
 			dirname: __dirname,
 			enabled: true,
 			guildOnly: true,
-			aliases: [ "credits", "balance" ],
+			aliases: [ "credits", "money", "bal" ],
 			memberPermissions: [],
 			botPermissions: [ "SEND_MESSAGES", "EMBED_LINKS" ],
 			nsfw: false,

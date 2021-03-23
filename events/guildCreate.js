@@ -16,6 +16,7 @@ module.exports = class {
 		}
         
 		guild = await guild.fetch();
+		const owner = await this.client.users.fetch(guild.ownerID);
 
 		const messageOptions = {};
 
@@ -40,10 +41,9 @@ module.exports = class {
 			.setFooter(this.client.config.embed.footer)
 			.setTimestamp();
 		messageOptions.embed = thanksEmbed;
+		owner.send(messageOptions).catch(() => {});
 
-		guild.owner.send(messageOptions).catch(() => {});
-
-		const text = "J'ai rejoint **"+guild.name+"**, avec **"+guild.members.cache.filter((m) => !m.user.bot).size+"** membres (et "+guild.members.cache.filter((m) => m.user.bot).size+" bots)";
+		const text = "Joined **"+guild.name+"**, with **"+guild.members.cache.filter((m) => !m.user.bot).size+"** members ("+guild.members.cache.filter((m) => m.user.bot).size+" bots)";
 
 		// Sends log embed in the logs channel
 		const logsEmbed = new Discord.MessageEmbed()

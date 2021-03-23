@@ -1,5 +1,8 @@
 const Command = require("../../base/Command.js"),
-	Discord = require("discord.js");
+	Discord = require("discord.js"),
+	svgCaptcha = require('svg-captcha'),
+	{ svg2png } = require('svg-png-converter');
+
 
 class Work extends Command {
 
@@ -34,13 +37,52 @@ class Work extends Command {
 		}
 
 		if(Date.now() > data.memberData.cooldowns.work+(24*3600000)){
+		if(data.memberData.workStreak && data.memberData.workStreak > 0) message.reply(message.translate('economy/work:STREAK_LOST'))
 			data.memberData.workStreak = 0;
 		}
 
 		// Records in the database the time when the member will be able to execute the command again (in 12 hours)
-		const toWait = Date.now() + 21600000;
+		const toWait = Date.now() + 3600000;
 		data.memberData.cooldowns.work = toWait;
 		data.memberData.markModified("cooldowns");
+		await data.memberData.save()
+		
+		var captcha = svgCaptcha.create({
+		    width: 80,
+		    height:25,
+		    fontSize: 30,
+		    color: true,
+		    background: '#ffffff'
+		});
+		const topng = await svg2png({
+		    input: captcha.data,
+		    encoding: 'buffer',
+		    format: 'png'
+		})
+		const image = new Discord.MessageAttachment(topng, 'captcha.png')
+		const workembed = new Discord.MessageEmbed()
+		.setTitle(`${message.author.tag}'s work`)
+		.setDescription(message.translate('economy/work:WORK_MESSAGE'))
+		.attachFiles(image)
+		.setImage('attachment://captcha.png')
+		.setColor(this.client.config.embed.color);
+		await message.reply(workembed);
+		const filter = res => {
+		    return res.author.id === message.author.id;
+		}
+		let correct = false;
+		const answer = await message.channel.awaitMessages(filter, { max: 1, time: 20000, errors: ['time'] }).catch(() => {})
+		if(answer && answer.first().content.toLowerCase() === captcha.text.toLowerCase()) correct = true;
+		
+		let lostamount = 250;
+		
+		if (!correct) {
+		    data.memberData.workStreak = 0;
+		    data.memberData.money += lostamount;
+		    await data.memberData.save();
+		    message.error('economy/work:WORK_FAIL', {tag: message.author.tag, amount: lostamount});
+		    return
+		}
 
 		data.memberData.workStreak = (data.memberData.workStreak || 0) + 1;
 		await data.memberData.save();
@@ -56,10 +98,12 @@ class Work extends Command {
 			this.client.customEmojis.letters.r,
 			this.client.customEmojis.letters.d
 		];
-		let won = 200;
+		let max = 2000
+		let min = 500
+		let won = Math.floor(Math.random() * (max - min + 1)) + min;
 
 		if(data.memberData.workStreak >= 5){
-			won += 200;
+			won += 500;
 			embed.addField(message.translate("economy/work:SALARY"), message.translate("economy/work:SALARY_CONTENT", {
 				won
 			}))
@@ -98,7 +142,7 @@ class Work extends Command {
 		}
 
 		// Send the embed in the current channel
-		message.channel.send(messageOptions);
+		message.channel.send(messageOptions).catch(() => {});
 
 	}
 

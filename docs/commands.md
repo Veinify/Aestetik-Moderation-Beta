@@ -85,12 +85,12 @@ Here's the list of Atlanta commands. This one contains more than **110 commands*
 | Name             | Description                                                         | Usage                            | Cooldown   |
 | ---------------- | ------------------------------------------------------------------- | -------------------------------- | ---------- |
 | **achievements** | Shows your achievements list!                                       | achievements                     | 1 seconds  |
+| **balance**      | DESCRIPTION                                                         | USAGE                            | 1 seconds  |
 | **birthdate**    | Set the birthday date that appear on your profile                   | birthdate (date)                 | 1 seconds  |
 | **deposit**      | Deposit your money in the bank                                      | deposit [amount]                 | 1 seconds  |
 | **divorce**      | Divorce the person you are currently married to!                    | divorce                          | 3 seconds  |
 | **leaderboard**  | Shows users who have the most credits, levels or reputation points! | leaderboard [rep/levels/credits] | 5 seconds  |
 | **marry**        | Marry someone you love!                                             | marry [@member]                  | 10 seconds |
-| **money**        | Shows your credits                                                  | money (@member)                  | 1 seconds  |
 | **pay**          | Send money to someone!                                              | pay [@member] [amount]           | 10 seconds |
 | **profile**      | Shows the mentioned user or author profile                          | profile [user]                   | 3 seconds  |
 | **rep**          | Give a reputation point to someone!                                 | rep [user]                       | 3 seconds  |

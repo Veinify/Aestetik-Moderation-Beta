@@ -3,9 +3,12 @@
     "USAGE": "{{prefix}}work",
     "EXAMPLES": "{{prefix}}work",
     "COOLDOWN": "Kamu harus menunggu {{time}} sebelum bekerja lagi!",
-    "AWARD": "Lengkapi kata AWARD untuk memenangkan 200 kredit bonus!",
+    "AWARD": "Lengkapi kata AWARD untuk memenangkan 500 kredit bonus!",
     "SALARY": "Gaji",
     "SALARY_CONTENT": "Kamu mendapatkan {{won}} kredit!",
     "STREAK": "Streak",
-    "STREAK_CONTENT": "🎉 Kamu memenangkan 200 kredit bonus!"
+    "STREAK_CONTENT": "🎉 Kamu memenangkan 500 kredit bonus!",
+    "STREAK_LOST": "Anda tidak bekerja selama sehari, Anda telah kehilangan kerja streak Anda.",
+    "WORK_MESSAGE": "Untuk menyelesaikan pekerjaan Anda, Anda perlu mengucapkan huruf-huruf pada gambar di bawah ini.",
+    "WORK_FAIL": "Kerja buruk `{{tag}}`. Anda telah gagal dalam tugas Anda. Anda kehilangan kerja streak dan diberi {{amount}} untuk pekerjaan hari ini."
 }

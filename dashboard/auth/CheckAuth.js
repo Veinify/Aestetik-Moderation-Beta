@@ -1,5 +1,8 @@
+const nonsecurePath = require('../nonsecurePath')
 module.exports = async (req, res, next) => {
-	if(req.session.user){
+	if(nonsecurePath.includes(req.path)) {
+	    return next();
+	} else if(req.session.user){
 		return next();
 	} else {
 		const redirectURL = ((req.originalUrl.includes("login") || req.originalUrl === "/") ? "/selector" : req.originalUrl);

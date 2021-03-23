@@ -1,0 +1,5 @@
+{
+    "BEG_LIST": "Choose someone you wanted to beg on:\n{{options}}",
+    "TIMED_OUT": "You didn't pick any in time. What's the point of running this command",
+    "NOT_FOUND": "That person is not on the list????"
+}

@@ -17,9 +17,9 @@ if(config.apiKeys.sentryDSN){
 	}
 }
 
-// Load Atlanta class
-const Atlanta = require("./base/Atlanta"),
-	client = new Atlanta();
+// Load AestetikModeration class
+const AestetikModeration = require("./base/AestetikModeration"),
+	client = new AestetikModeration();
 
 const init = async () => {
 

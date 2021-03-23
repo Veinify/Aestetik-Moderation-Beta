@@ -1,6 +1,7 @@
 const config = require("../config"),
 	utils = require("./utils"),
-	CheckAuth = require("./auth/CheckAuth");
+	CheckAuth = require("./auth/CheckAuth"),
+	nonsecurePath = require('./nonsecurePath');
 
 module.exports.load = async(client) => {
 
@@ -54,6 +55,7 @@ module.exports.load = async(client) => {
 		.use("/settings", settingsRouter)
 		.use("/", mainRouter)
 		.use(CheckAuth, function(req, res){
+		    if (nonsecurePath.includes(req.path)) return res.send('ping received')
 			res.status(404).render("404", {
 				user: req.userInfos,
 				translate: req.translate,
@@ -68,11 +70,11 @@ module.exports.load = async(client) => {
 				translate: req.translate,
 				currentURL: `${req.protocol}://${req.get("host")}${req.originalUrl}`
 			});
-		});
+		})
 
 	// Listen
 	app.listen(app.get("port"), () => {
-		console.log("Atlanta Dashboard is listening on port "+app.get("port"));
+		console.log("Aestetik Dashboard is listening on port "+app.get("port"));
 	});
 
 };
