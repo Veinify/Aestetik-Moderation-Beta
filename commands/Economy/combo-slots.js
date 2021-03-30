@@ -93,6 +93,14 @@ class ComboSlots extends Command {
 		    //ignore an element thats not array
 		    if (!Array.isArray(s)) break;
 		}
+		    try {
+		    //ignore an element thats not array
+		    if (!Array.isArray(s)) return;
+		    } finally {
+		        table.addRow(...s)
+		    }
+		}
+		message.channel.send(table.toString())
 	}
 }
 module.exports = ComboSlots;
