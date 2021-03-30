@@ -3,12 +3,12 @@
     "USAGE": "{{prefix}}work",
     "EXAMPLES": "{{prefix}}work",
     "COOLDOWN": "You have to wait {{time}} before working again!",
-    "AWARD": "Complete a palavra AWARD para ganhar 500 créditos de bônus!",
+    "AWARD": "Complete a palavra AWARD para ganhar {{cLogo}}500 créditos de bônus!",
     "SALARY": "Salário",
-    "SALARY_CONTENT": "You've gained {{won}} credits!",
+    "SALARY_CONTENT": "You've gained {{cLogo}}{{won}} credits!",
     "STREAK": "À risca",
-    "STREAK_CONTENT": "🎉 You've won 500 bonus credits!",
+    "STREAK_CONTENT": "🎉 You've won {{cLogo}}500 bonus credits!",
     "STREAK_LOST": "Você não trabalhou por um dia, você perdeu sua seqüência.",
     "WORK_MESSAGE": "To get your work done, you need to say the letters in the image below.",
-    "WORK_FAIL": "Bad job `{{tag}}`. You've failed your task. You lost your work streak and you've been given {{amount}} for today's work."
+    "WORK_FAIL": "Bad job `{{tag}}`. You've failed your task. You lost your work streak and you've been given {{cLogo}}{{amount}} for today's work."
 }

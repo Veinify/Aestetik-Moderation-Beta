@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Supplica qualcuno di darti dei soldi (c'è una possibilità che tu venga multato o addirittura **morto**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
+    "BEG_LIST": "Scegli qualcuno per cui volevi mendicare:\n{{options}}",
+    "TIMED_OUT": "Non hai scelto in tempo. Qual è il punto di eseguire questo comando",
+    "NOT_FOUND": "Quella persona non è sulla lista????"
+}

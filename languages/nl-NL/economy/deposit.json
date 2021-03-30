@@ -4,6 +4,7 @@
     "EXAMPLES": "{{prefix}}deposit 400",
     "MISSING_AMOUNT": "Please specify an amount!",
     "NO_CREDIT": "U heeft geen credits om op de bank te storten!",
-    "NO_ENOUGH_CREDIT": "Je hebt geen `{{money}}` credits!",
-    "SUCCESS": "**{{money}}** credits gestort op de bank!"
+    "NO_ENOUGH_CREDIT": "Je hebt geen `{{cLogo}}{{money}}` credits!",
+    "SUCCESS": "**{{cLogo}}{{money}}** credits gestort op de bank!",
+    "TOO_LARGE": "U kunt alleen {{cLogo}}{{available}} in uw bank hebben. U kunt meer bankruimten krijgen door opdrachten uit te voeren."
 }

@@ -1,8 +1,8 @@
 {
-    "DESCRIPTION": "The Atlanta casino",
+    "DESCRIPTION": "Tente sua sorte e ganhe nossa máquina caça-níqueis para obter uma boa recompensa",
     "USAGE": "{{prefix}}slots [amount]",
     "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
-    "DEFEAT": "**{{username}}** usou {{money}} crédito (s) e perdeu tudo.",
-    "VICTORY": "**{{username}}** usou {{money}} créditos e ganhos {{won}} créditos!",
-    "NOT_ENOUGH": "You need at least **{{money}}** credit(s)."
+    "DEFEAT": "**{{username}}** usou {{cLogo}}{{money}} crédito (s) e perdeu tudo.",
+    "VICTORY": "**{{username}}** usou {{cLogo}}{{money}} créditos e ganhos {{cLogo}}{{won}} créditos!",
+    "NOT_ENOUGH": "You need at least **{{cLogo}}{{money}}** credit(s)."
 }

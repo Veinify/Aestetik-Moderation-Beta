@@ -5,7 +5,8 @@ const Sentry = require("@sentry/node"),
 	fs = require("fs"),
 	readdir = util.promisify(fs.readdir),
 	mongoose = require("mongoose"),
-	chalk = require("chalk");
+	chalk = require("chalk")
+	Discord = require('discord.js');
 
 const config = require("./config");
 if(config.apiKeys.sentryDSN){
@@ -19,7 +20,13 @@ if(config.apiKeys.sentryDSN){
 
 // Load AestetikModeration class
 const AestetikModeration = require("./base/AestetikModeration"),
-	client = new AestetikModeration();
+	intents = new Discord.Intents();
+
+intents.add( "GUILD_PRESENCES", "GUILD_MEMBERS", "GUILDS", "GUILD_VOICE_STATES", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS");
+	
+const client = new AestetikModeration({
+    ws: { intents: intents }, restTimeOffset: 0
+});
 
 const init = async () => {
 
@@ -71,7 +78,6 @@ client.on("disconnect", () => client.logger.log("Bot is disconnecting...", "warn
 	.on("reconnecting", () => client.logger.log("Bot reconnecting...", "log"))
 	.on("error", (e) => client.logger.log(e, "error"))
 	.on("warn", (info) => client.logger.log(info, "warn"));
-
 // if there is an unhandledRejection, log them
 process.on("unhandledRejection", (err) => {
 	console.error(err);

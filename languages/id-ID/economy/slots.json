@@ -1,8 +1,8 @@
 {
-    "DESCRIPTION": "Kasino Atlanta",
+    "DESCRIPTION": "Coba keberuntungan Anda dan menangkan mesin slot kami untuk mendapatkan hadiah yang bagus",
     "USAGE": "{{prefix}}slots [jumlah]",
     "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
-    "DEFEAT": "**{{username}}** menggunakan {{money}} kredit dan kehilangan semuanya.",
-    "VICTORY": "**{{username}}** menggunakan {{money}} dan memenangkan {{won}} kredit!",
-    "NOT_ENOUGH": "Kamu butuh setidaknya **{{money}}** kredit."
+    "DEFEAT": "**{{username}}** menggunakan {{cLogo}}{{money}} kredit dan kehilangan semuanya.",
+    "VICTORY": "**{{username}}** menggunakan {{cLogo}}{{money}} dan memenangkan {{cLogo}}{{won}} kredit!",
+    "NOT_ENOUGH": "Kamu butuh setidaknya **{{cLogo}}{{money}}** kredit."
 }

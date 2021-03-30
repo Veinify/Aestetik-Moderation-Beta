@@ -4,6 +4,8 @@
     "EXAMPLES": "{{prefix}}deposit 400",
     "MISSING_AMOUNT": "Lütfen uygun bir miktar gir!",
     "NO_CREDIT": "Bankaya koyacak paran yok!",
-    "NO_ENOUGH_CREDIT": "`{{money}}` kadar paran yok!",
-    "SUCCESS": "**{{money}}** Paranı banka hesabına yatrıdım!"
+    "NO_ENOUGH_CREDIT": "`{{cLogo}}{{money}}` kadar paran yok!",
+    "SUCCESS": "**{{cLogo}}{{money}}** Paranı banka hesabına yatrıdım!",
+    "TOO_LARGE": "Bankanızda yalnızca {{cLogo}}{{available}} tutabilirsiniz. Komutları çalıştırarak daha fazla banka alanı elde edebilirsiniz."
+
 }

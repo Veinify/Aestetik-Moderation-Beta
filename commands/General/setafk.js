@@ -29,8 +29,6 @@ class Setafk extends Command {
 		});
 
 		data.userData.afk = reason;
-		data.userData.save();
-
 	}
 
 }

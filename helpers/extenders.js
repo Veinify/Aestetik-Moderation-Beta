@@ -1,34 +1,38 @@
-const { Guild, Message, MessageEmbed } = require("discord.js");
-const config = require("../config");
+const { Guild, Message, MessageEmbed } = require('discord.js');
+const config = require('../config');
+
+var cLogo = config.currencyLogo;
 
 Guild.prototype.translate = function(key, args) {
 	const language = this.client.translations.get(this.data.language);
-	if (!language) throw "Message: Invalid language set in data.";
+	if (!language) throw 'Message: Invalid language set in data.';
 	return language(key, args);
 };
 
-Message.prototype.translate = function(key, args) {
+Message.prototype.translate = function(key, args = {}) {
+	if (args && typeof args === 'object') args['cLogo'] = cLogo;
 	const language = this.client.translations.get(
-		this.guild ? this.guild.data.language : "en-US"
+		this.author.userData.settings.language || 'en-US'
 	);
-	if (!language) throw "Message: Invalid language set in data.";
+	if (!language) throw 'Message: Invalid language set in data.';
 	return language(key, args);
 };
 
 // Wrapper for sendT with error emoji
 Message.prototype.error = function(key, args, options = {}) {
-	options.prefixEmoji = "error";
+	options.prefixEmoji = 'error';
 	return this.sendT(key, args, options);
 };
 
 // Wrapper for sendT with success emoji
 Message.prototype.success = function(key, args, options = {}) {
-	options.prefixEmoji = "success";
+	options.prefixEmoji = 'success';
 	return this.sendT(key, args, options);
 };
 
 // Translate and send the message
-Message.prototype.sendT = function(key, args, options = {}) {
+Message.prototype.sendT = function(key, args = {}, options = {}) {
+	if (args && typeof args === 'object') args['cLogo'] = cLogo;
 	let string = this.translate(key, args);
 	if (options.prefixEmoji) {
 		string = `${this.client.customEmojis[options.prefixEmoji]} | ${string}`;
@@ -47,20 +51,51 @@ Message.prototype.printDate = function(date, format) {
 
 // Convert time
 Message.prototype.convertTime = function(time, type, noPrefix) {
-	return this.client.convertTime(time, type, noPrefix, (this.guild && this.guild.data) ? this.guild.data.language : null);
+	return this.client.convertTime(
+		time,
+		type,
+		noPrefix,
+		this.guild && this.guild.data ? this.guild.data.language : null
+	);
 };
 
 MessageEmbed.prototype.errorColor = function() {
-	this.setColor("#FF0000");
+	this.setColor('#FF0000');
 	return this;
 };
 
 MessageEmbed.prototype.successColor = function() {
-	this.setColor("#32CD32");
+	this.setColor('#32CD32');
 	return this;
 };
 
+MessageEmbed.prototype.waitColor = function() {
+    this.setColor('#FBEF01');
+    return this;
+};
+
 MessageEmbed.prototype.defaultColor = function() {
-	this.setColor(config.color);
+	this.setColor(config.embed.color);
 	return this;
 };
+
+MessageEmbed.prototype.defaultFooter = function() {
+    this.setFooter(config.embed.footer);
+    return this;
+};
+
+Number.prototype.commas = function() {
+	return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+Object.defineProperty(Array.prototype, 'toPages', {
+	value: function(chunkSize) {
+		var array = this;
+		return [].concat.apply(
+			[],
+			array.map(function(elem, i) {
+				return i % chunkSize ? [] : [array.slice(i, i + chunkSize)];
+			})
+		);
+	}
+});

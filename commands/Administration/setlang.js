@@ -27,8 +27,8 @@ class Setlang extends Command {
 			});
 		}
 
-		data.guild.language = language.name;
-		await data.guild.save();
+		data.userData.settings.language = language.name;
+		await data.userData.markModified('settings');
         
 		return message.sendT("administration/setlang:SUCCESS");
         

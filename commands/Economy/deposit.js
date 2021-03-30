@@ -21,12 +21,15 @@ class Deposit extends Command {
         
 		let amount = args[0];
 
-		if(!(parseInt(data.memberData.money, 10) > 0)) {
+		if(!(parseInt(data.userData.money, 10) > 0)) {
 			return message.error("economy/deposit:NO_CREDIT");
 		}
 
 		if(args[0] === "all"){
-			amount = parseInt(data.memberData.money, 10);
+			amount = parseInt(data.userData.money, 10);
+		} else if (args[0] === "max") {
+		    if (data.userData.money > (data.userData.bankSpace - data.userData.bankSold)) amount = parseInt(data.userData.bankSpace - data.userData.bankSold)
+		    else amount = parseInt(data.userData.money);
 		} else {
 			if(isNaN(amount) || parseInt(amount, 10) < 1){
 				return message.error("economy/deposit:MISSING_AMOUNT");
@@ -34,18 +37,21 @@ class Deposit extends Command {
 			amount = parseInt(amount, 10);
 		}
         
-		if(data.memberData.money < amount){
+		if(data.userData.money < amount){
 			return message.error("economy/deposit:NOT_ENOUGH_CREDIT", {
-				money: amount
+				money: amount.commas()
 			});
 		}
+		const available = data.userData.bankSpace - data.userData.bankSold;
+		if (amount > available) {
+		    return message.error("economy/deposit:TOO_LARGE", {available: data.userData.bankSpace.commas()})
+		}
 
-		data.memberData.money = data.memberData.money - amount;
-		data.memberData.bankSold = data.memberData.bankSold + amount;
-		data.memberData.save();
+		data.userData.money = data.userData.money - amount;
+		data.userData.bankSold = data.userData.bankSold + amount;
 
 		message.success("economy/deposit:SUCCESS", {
-			money: amount
+			money: amount.commas()
 		});
 	}
 

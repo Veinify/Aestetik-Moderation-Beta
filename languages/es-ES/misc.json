@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Something went wrong... Please retry again later!",
+    "ERR_OCCURRED": "Algo salió mal con el comando `{{command}}`... El error ha sido enviado a nuestro servidor de soporte. Vuelve a intentarlo más tarde.",
     "PLEASE_WAIT": "Por favor espere unos segundos...",
     "COMMAND_DISABLED": "¡Este comando está actualmente desactivado!",
     "TIMES_UP": "¡Se acabó el tiempo! Por favor envíe el comando de nuevo!",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "¡Debes ejecutar este comando en un canal que permita NSFW!",
     "OWNER_ONLY": "¡Sólamente el creador de Atlanta puede ejecutar el comando!",
     "COOLDOWNED": "¡Debe esperar **{{seconds}}** segundo(s) para poder ejecutar el comando nuevamente!",
-    "CANNOT_DM": "No tengo permiso para enviarle mensajes privados... Por favor, actualiza tu configuración de privacidad!"
+    "CANNOT_DM": "No tengo permiso para enviarle mensajes privados... Por favor, actualiza tu configuración de privacidad!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

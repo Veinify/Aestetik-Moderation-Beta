@@ -1,17 +1,18 @@
-const languages = require("../languages/language-meta.json").map((l) => l.moment).filter((l) => l !== "en");
-languages.forEach((l) => {
+const languages = require('../languages/language-meta.json')
+	.map(l => l.moment)
+	.filter(l => l !== 'en');
+languages.forEach(l => {
 	require(`moment/locale/${l}.js`);
 });
 
 module.exports = {
-
 	/**
-     * Gets message prefix
-     * @param {object} message The Discord message
-     * @returns The prefix
-     */
-	getPrefix(message, data){
-		if(message.channel.type !== "dm"){
+	 * Gets message prefix
+	 * @param {object} message The Discord message
+	 * @returns The prefix
+	 */
+	getPrefix(message, data) {
+		if (message.channel.type !== 'dm') {
 			const prefixes = [
 				`<@!${message.client.user.id}> `,
 				`<@${message.client.user.id}> `,
@@ -19,8 +20,11 @@ module.exports = {
 				data.guild.prefix
 			];
 			let prefix = null;
-			prefixes.forEach((p) => {
-				if(message.content.startsWith(p) || message.content.toLowerCase().startsWith(p)){
+			prefixes.forEach(p => {
+				if (
+					message.content.startsWith(p) ||
+					message.content.toLowerCase().startsWith(p)
+				) {
 					prefix = p;
 				}
 			});
@@ -31,24 +35,26 @@ module.exports = {
 	},
 
 	// This function return a valid link to the support server
-	async supportLink(client){
+	async supportLink(client) {
 		const guild = client.guilds.cache.get(client.config.support.id);
 		const member = guild.me;
-		const channel = guild.channels.cache.find((ch) => ch.permissionsFor(member.id).has("CREATE_INSTANT_INVITE"));
-		if(channel){
+		const channel = guild.channels.cache.find(ch =>
+			ch.permissionsFor(member.id).has('CREATE_INSTANT_INVITE')
+		);
+		if (channel) {
 			const invite = await channel.createInvite({ maxAge: 0 }).catch(() => {});
 			return invite ? invite.url : null;
 		} else {
-			return "https://atlanta-bot.fr";
+			return 'https://atlanta-bot.fr';
 		}
 	},
 
-	// This function sort an array 
+	// This function sort an array
 	sortByKey(array, key) {
 		return array.sort(function(a, b) {
 			const x = a[key];
 			const y = b[key];
-			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+			return x < y ? 1 : x > y ? -1 : 0;
 		});
 	},
 
@@ -56,7 +62,9 @@ module.exports = {
 	shuffle(pArray) {
 		const array = [];
 		pArray.forEach(element => array.push(element));
-		let currentIndex = array.length, temporaryValue, randomIndex;
+		let currentIndex = array.length,
+			temporaryValue,
+			randomIndex;
 		// While there remain elements to shuffle...
 		while (0 !== currentIndex) {
 			// Pick a remaining element...
@@ -72,7 +80,8 @@ module.exports = {
 
 	// This function return a random number between min and max
 	randomNum(min, max) {
-		return Math.floor(Math.random() * (max - min)) + min;
+		return Math.round( Math.random() * (max - min) + min); 
+
 	},
 
 	convertTime(guild, time) {
@@ -83,23 +92,23 @@ module.exports = {
 
 		const d = absoluteDays
 			? absoluteDays === 1
-				? guild.translate("time:ONE_DAY")
-				: guild.translate("time:DAYS", { amount: absoluteDays })
+				? guild.translate('time:ONE_DAY')
+				: guild.translate('time:DAYS', { amount: absoluteDays })
 			: null;
 		const h = absoluteHours
 			? absoluteHours === 1
-				? guild.translate("time:ONE_HOUR")
-				: guild.translate("time:HOURS", { amount: absoluteHours })
+				? guild.translate('time:ONE_HOUR')
+				: guild.translate('time:HOURS', { amount: absoluteHours })
 			: null;
 		const m = absoluteMinutes
 			? absoluteMinutes === 1
-				? guild.translate("time:ONE_MINUTE")
-				: guild.translate("time:MINUTES", { amount: absoluteMinutes })
+				? guild.translate('time:ONE_MINUTE')
+				: guild.translate('time:MINUTES', { amount: absoluteMinutes })
 			: null;
 		const s = absoluteSeconds
 			? absoluteSeconds === 1
-				? guild.translate("time:ONE_SECOND")
-				: guild.translate("time:SECONDS", { amount: absoluteSeconds })
+				? guild.translate('time:ONE_SECOND')
+				: guild.translate('time:SECONDS', { amount: absoluteSeconds })
 			: null;
 
 		const absoluteTime = [];
@@ -108,7 +117,15 @@ module.exports = {
 		if (m) absoluteTime.push(m);
 		if (s) absoluteTime.push(s);
 
-		return absoluteTime.join(", ");
+		return absoluteTime.join(', ');
+	},
+	calculateLevel(xp) {
+		return Math.floor(0.1 * Math.sqrt(xp));
+	},
+	calculateXp(level) {
+		return Math.floor(100 * level ** 2);
+	},
+	percentCalc(wonPercent, money) {
+		return parseInt(Math.floor((money * wonPercent) / 100));
 	}
-
 };

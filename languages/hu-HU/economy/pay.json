@@ -6,6 +6,6 @@
     "BOT_USER": "A botok már gazdagok 💰!",
     "YOURSELF": "Nem küldhetsz magadnak!",
     "INVALID_AMOUNT": "Meg kell adnod egy érvényes összeget",
-    "ENOUGH_MONEY": "Nem engedheted meg ezt magadnak: **{{amount}}**",
-    "SUCCESS": "Küldtél **{{username}}** felhasználónak **{{amount}}** pénzt!"
+    "ENOUGH_MONEY": "Nem engedheted meg ezt magadnak: **{{cLogo}}{{amount}}**",
+    "SUCCESS": "Küldtél **{{username}}** felhasználónak **{{cLogo}}{{amount}}** pénzt!"
 }
