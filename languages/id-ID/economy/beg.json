@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Memohon seseorang untuk memberi Anda uang (ada kemungkinan Anda akan didenda atau bahkan **meninggal**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
+    "BEG_LIST": "Pilih seseorang yang ingin Anda minta:\n{{options}}",
+    "TIMED_OUT": "Anda tidak memilih dalam waktu. Apa gunanya menjalankan perintah ini",
+    "NOT_FOUND": "Orang itu tidak ada dalam daftar????"
+}

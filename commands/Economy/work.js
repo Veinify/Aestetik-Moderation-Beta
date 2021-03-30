@@ -12,7 +12,7 @@ class Work extends Command {
 			dirname: __dirname,
 			enabled: true,
 			guildOnly: true,
-			aliases: [ "salaire", "salary", "travail", "daily", "dailies" ],
+			aliases: [],
 			memberPermissions: [],
 			botPermissions: [ "SEND_MESSAGES", "EMBED_LINKS" ],
 			nsfw: false,
@@ -24,7 +24,7 @@ class Work extends Command {
 	async run (message, args, data) {
 
 		// if the member is already in the cooldown db
-		const isInCooldown = data.memberData.cooldowns.work;
+		const isInCooldown = data.userData.cooldowns.work;
 		if(isInCooldown){
 			/*if the timestamp recorded in the database indicating 
             when the member will be able to execute the order again 
@@ -36,17 +36,16 @@ class Work extends Command {
 			}
 		}
 
-		if(Date.now() > data.memberData.cooldowns.work+(24*3600000)){
-		if(data.memberData.workStreak && data.memberData.workStreak > 0) message.reply(message.translate('economy/work:STREAK_LOST'))
-			data.memberData.workStreak = 0;
+		if(Date.now() > data.userData.cooldowns.work+(24*3600000)){
+		if(data.userData.workStreak && data.userData.workStreak > 0) message.reply(message.translate('economy/work:STREAK_LOST'))
+			data.userData.workStreak = 0;
 		}
 
 		// Records in the database the time when the member will be able to execute the command again (in 12 hours)
 		const toWait = Date.now() + 3600000;
-		data.memberData.cooldowns.work = toWait;
-		data.memberData.markModified("cooldowns");
-		await data.memberData.save()
-		
+		data.userData.cooldowns.work = toWait;
+		data.userData.markModified("cooldowns");
+
 		var captcha = svgCaptcha.create({
 		    width: 80,
 		    height:25,
@@ -65,7 +64,8 @@ class Work extends Command {
 		.setDescription(message.translate('economy/work:WORK_MESSAGE'))
 		.attachFiles(image)
 		.setImage('attachment://captcha.png')
-		.setColor(this.client.config.embed.color);
+		.defaultColor()
+		.defaultFooter();
 		await message.reply(workembed);
 		const filter = res => {
 		    return res.author.id === message.author.id;
@@ -77,15 +77,13 @@ class Work extends Command {
 		let lostamount = 250;
 		
 		if (!correct) {
-		    data.memberData.workStreak = 0;
-		    data.memberData.money += lostamount;
-		    await data.memberData.save();
-		    message.error('economy/work:WORK_FAIL', {tag: message.author.tag, amount: lostamount});
+		    data.userData.workStreak = 0;
+		    data.userData.money += lostamount;
+		    message.error('economy/work:WORK_FAIL', {tag: message.author.tag, amount: lostamount.commas()});
 		    return
 		}
 
-		data.memberData.workStreak = (data.memberData.workStreak || 0) + 1;
-		await data.memberData.save();
+		data.userData.workStreak = (data.userData.workStreak || 0) + 1;
 
 		const embed = new Discord.MessageEmbed()
 			.setFooter(message.translate("economy/work:AWARD"), message.author.displayAvatarURL())
@@ -102,28 +100,27 @@ class Work extends Command {
 		let min = 500
 		let won = Math.floor(Math.random() * (max - min + 1)) + min;
 
-		if(data.memberData.workStreak >= 5){
+		if(data.userData.workStreak >= 5){
 			won += 500;
 			embed.addField(message.translate("economy/work:SALARY"), message.translate("economy/work:SALARY_CONTENT", {
-				won
+				won: won.commas()
 			}))
 				.addField(message.translate("economy/work:STREAK"), message.translate("economy/work:STREAK_CONTENT"));
-			data.memberData.workStreak = 0;
+			data.userData.workStreak = 0;
 		} else {
 			for(let i = 0; i < award.length; i++){
-				if(data.memberData.workStreak > i){
+				if(data.userData.workStreak > i){
 					const letter = Discord.Util.parseEmoji(award[i]).name.split("_")[1];
 					award[i] = `:regional_indicator_${letter.toLowerCase()}:`;
 				}
 			}
 			embed.addField(message.translate("economy/work:SALARY"), message.translate("economy/work:SALARY_CONTENT", {
-				won
+				won: won.commas()
 			}))
 				.addField(message.translate("economy/work:STREAK"), award.join(""));
 		}
 
-		data.memberData.money = data.memberData.money + won;
-		data.memberData.save();
+		data.userData.money += won;
 
 		const messageOptions = { embed };
 		if(!data.userData.achievements.work.achieved){
@@ -137,12 +134,12 @@ class Work extends Command {
 				];
 				data.userData.achievements.work.achieved = true;
 			}
-			data.userData.markModified("achievements.work");
-			data.userData.save();
+			await data.userData.markModified("achievements.work");
+			
 		}
-
+		
 		// Send the embed in the current channel
-		message.channel.send(messageOptions).catch(() => {});
+		await message.channel.send(messageOptions).catch(() => {});
 
 	}
 

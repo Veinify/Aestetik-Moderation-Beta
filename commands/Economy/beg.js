@@ -1,6 +1,7 @@
-const Command = require("../../base/Command.js"),
-	Discord = require("discord.js");
-	
+const Command = require('../../base/Command.js'),
+	Discord = require('discord.js'),
+	Notification = require('../../base/Notification');
+
 let persons = [
 	'Donald Trump',
 	'Bill Gates',
@@ -21,7 +22,9 @@ let persons = [
 	'Amogus',
 	'imsofate',
 	'LeBron James',
-	'Will Smith'
+	'Will Smith',
+	'Jimmy Neutron',
+	'Random Person'
 ];
 
 let answers = {
@@ -34,10 +37,11 @@ let answers = {
 	fail: [
 		'"Too bad i don\'t have any"',
 		'"Nah mate, i only gives money to the poor"',
-		'"Bro stop calling me bro."',
+		'"Yo stop f\'ing calling me bro."',
 		'"I don\'t give money to a beggars like you"',
 		'"no hablan Inglés"',
-		'"Beggars can\'t be choosers"'
+		'"Beggars can\'t be choosers"',
+		'"nou"'
 	],
 	fined: [
 		'A police has caught you begging on the street. You have been fined **{{amount}} coins**',
@@ -66,69 +70,117 @@ class Beg extends Command {
 	}
 
 	async run(message, args, data) {
-	    let options = getRandom(persons, 3);
-	    let optionslowercase = options.map(function(value) { return value.toLowerCase(); });
-	    let optmsg = [];
-	    for (const opt of options) {
-	        optmsg.push(`\`${opt}\``)
-	    }
-	    await message.channel.send(message.translate('economy/beg:BEG_LIST', {options: optmsg.join(',')}))
-	    const filter = res => {
-		    return res.author.id === message.author.id;
+		const cLogo = this.client.config.currencyLogo;
+		let options = getRandom(persons, 3);
+		let optionslowercase = options.map(function(value) {
+			return value.toLowerCase();
+		});
+		let optmsg = [];
+		for (const opt of options) {
+			optmsg.push(`\`${opt}\``);
 		}
-		const answer = await message.channel.awaitMessages(filter, { max: 1, time: 20000, errors: ['time'] }).catch(() => {})
-		if (!answer) return message.channel.send(`${message.author}, ${message.translate('economy/beg:TIMED_OUT')}`)
-		const result = (answer.first()).content;
-		const chosen = optionslowercase.indexOf(result.toLowerCase())
-		
-		if (chosen < 0) return message.channel.send(`${message.author}, ${message.translate('economy/beg:NOT_FOUND')}`)
-		options.splice(chosen, 1)
+		await message.channel.send(`
+			${message.author}, ${message.translate('economy/beg:BEG_LIST', {
+			options: optmsg.join(', ')
+		})}`);
+		const filter = res => {
+			return res.author.id === message.author.id;
+		};
+		const answer = await message.channel
+			.awaitMessages(filter, { max: 1, time: 20000, errors: ['time'] })
+			.catch(() => {});
+		if (!answer)
+			return message.channel.send(
+				`${message.author}, ${message.translate('economy/beg:TIMED_OUT')}`
+			);
+		const result = answer.first().content;
+		const chosen = optionslowercase.indexOf(result.toLowerCase());
+
+		if (chosen < 0)
+			return message.channel.send(
+				`${message.author}, ${message.translate('economy/beg:NOT_FOUND')}`
+			);
+		options = options.splice(chosen, 1);
 		const embed = new Discord.MessageEmbed()
-		.setTitle(options.join(''))
-		.setColor(this.client.config.embed.color)
-		.setFooter(this.client.config.embed.footer);
-		
+			.setTitle(options.join(''))
+			.setFooter(this.client.config.embed.footer);
+
 		let payout;
-		const random = Math.floor(Math.Random()*100) + 1;
+		const random = Math.floor(this.client.functions.randomNum(1, 100));
 		const min = 50;
 		const max = 200;
-		const payoutamount = Math.floor(Math.random() * (max - min + 1)) + min;
+		const payoutamount = Math.floor(this.client.functions.randomNum(min, max));
 		/*
-		1-30 = success
-		30-60 = fail
-		60-90 = fined
-		90-100 = death
+		1-50 = success
+		50-85 = fail
+		85-95 = fined
+		95-100 = death
 		*/
-		if (random < 30) payout = 'success';
-		else if (random > 30 && random < 60) payout = 'fail';
-		else if (random > 60 && random < 90) payout = 'fined';
-		else if(random > 90) payout = 'death';
-		
+		if (random < 50) payout = 'success';
+		else if (random > 50 && random < 85) payout = 'fail';
+		else if (random > 85 && random < 95) payout = 'fined';
+		else if (random > 95) payout = 'death';
+		else payout = 'success'; //if somehow it broke
+
 		switch (payout) {
-		    case 'success':
-		        let successarr = answers['success']
-		        embed.setDescription((successarr[Math.floor(Math.random() * successarr.length) + 1]).replace('{{amount}}', payoutamount))
-		        data.memberData.money += payoutamount;
-		        break;
-		    case 'fail':
-		        let failarr = answers['fail'];
-		        embed.setDescription(failarr[Math.floor(Math.Random()*failarr.length)+1])
-		        break;
-		    case 'fined':
-		        let finedarr = answers['fined'];
-		        embed.setDescription((finedarr[Math.floor(Math.Random()*finedarr.length)+1]).replace('{{amount}}', payoutamount))
-		        data.memberData.money -= payoutamount;
-		        break;
-		    case 'death':
-		        let deatharr = answers['death'];
-		        embed.setDescription(deatharr[Math.floor(Math.Random()*deatharr.length)+1])
-		        data.memberData.money = 0;
+			case 'success':
+				let successarr = answers['success'];
+				embed.setDescription(
+					getRandom(successarr, 1)
+						.join('')
+						.replace('{{amount}}', `${cLogo}${payoutamount.commas()}`)
+				)
+				.successColor();
+				data.userData.money += payoutamount;
+				break;
+			case 'fail':
+				let failarr = answers['fail'];
+				embed.setDescription(getRandom(failarr, 1).join(''))
+				.waitColor();
+				break;
+			case 'fined':
+				let finedarr = answers['fined'];
+				embed.setDescription(
+					getRandom(finedarr, 1)
+						.join('')
+						.replace('{{amount}}', `${cLogo}${payoutamount.commas()}`)
+				)
+				.errorColor();
+				new Notification(this.client, data.userData, {
+					title: 'You have been fined!',
+					message: `You got fined **${
+						this.client.config.currencyLogo
+					}${payoutamount.commas()}** while trying to beg!`,
+					category: this.help.name
+				});
+				data.userData.money -= payoutamount;
+				break;
+			case 'death':
+				let deatharr = answers['death'];
+				embed.setDescription(
+					getRandom(deatharr, 1)
+						.join('')
+						.replace('{{amount}}', `${cLogo}${data.userData.money.commas()}`)
+				)
+				.errorColor();
+				new Notification(this.client, data.userData, {
+					title: 'You died!',
+					message: `You died when trying to beg. You lost **${
+						this.client.config.currencyLogo
+					}${data.userData.money.commas()}**. That's pretty unfortunate.`,
+					category: this.help.name
+				});
+				data.userData.money = 0;
+			default:
+			throw new Error(`Cannot determines if user won or fail (${this.help.name} command`)
+			break;
 		}
-		
-		await data.memberData.save()
-		message.channel.send(message.author, embed)
+
+		message.channel.send(message.author, embed);
 	}
 }
+
+module.exports = Beg;
 
 function getRandom(arr, n) {
 	var result = new Array(n),
@@ -137,7 +189,10 @@ function getRandom(arr, n) {
 	if (n > len)
 		throw new RangeError('getRandom: more elements taken than available');
 	while (n--) {
-		var x = Math.floor(Math.random() * len);
+		let x = Math.floor(Math.random() * len);
+		while (x > len || x < 0) {
+			x = Math.floor(Math.random() * len);
+		}
 		result[n] = arr[x in taken ? taken[x] : x];
 		taken[x] = --len in taken ? taken[len] : len;
 	}

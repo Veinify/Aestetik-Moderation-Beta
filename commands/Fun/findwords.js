@@ -110,7 +110,7 @@ class FindWords extends Command {
 							message.sendT("fun/findwords:CREDITS", {
 								winner: user.username
 							});
-							const userdata = await this.client.findOrCreateMember({ id: user.id, guildID: message.guild.id });
+							const userdata = await this.client.findOrCreateUser({ id: user.id });
 							userdata.money = userdata.money + 15;
 							userdata.save();
 						}

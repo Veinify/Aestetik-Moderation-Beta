@@ -1,15 +1,15 @@
 {
     "DESCRIPTION": "Try to rob a member!",
-    "USAGE": "{{prefix}}rob [@member] [amount]",
-    "EXAMPLES": "{{prefix}}rob @Androz#2091 100",
+    "USAGE": "{{prefix}}rob [@member]",
+    "EXAMPLES": "{{prefix}}rob @Veinify#1210",
     "YOURSELF": "You can't rob yourself!",
     "MISSING_MEMBER": "You must specify a valid member to rob!",
-    "MISSING_AMOUNT": "Please enter a valid amount!",
-    "NOT_ENOUGH_AUTHOR": "You must have more than **{{moneyMin}}** credits to attempt this robbery (you have **{{moneyCurrent}}** credits for now)!",
-    "NOT_ENOUGH_MEMBER": "You can't try your robbery because **{{username}}** doesn't have as many credits in cash!",
-    "COOLDOWN": "🕵️ **{{username}}** is on guard.... Wait a while and try again!",
-    "ROB_WON_1": "🎉 | Congratulations! The police weren't fast enough to stop you from robbing **{{money}}** credits to **{{username}}**!",
-    "ROB_WON_2": "😕 | **{{username}}** ? Bad news. You just got robbed **{{money}}** credits!",
-    "ROB_LOSE_1": "🚔 | The police caught you in the act, impossible to deny, your fine is **{{fine}}** credits. **{{offset}}** offset credits will be paid to **{{username}}**.",
-    "ROB_LOSE_2": "🚓 | Bad news.... **{{username}}** called the police in time. Your fine is **{{fine}}** credits and **{{offset}}** offset credits will be paid to **{{username}}**."
+    "NOT_ENOUGH_AUTHOR": "You need atleast **{{cLogo}}{{moneyMin}}** to try and rob someone!",
+    "NOT_ENOUGH_MEMBER": "You can't rob **{{username}}** because they doesn't have any money in their wallet!",
+    "COOLDOWN": "🕵️ Probably not a good idea to rob **{{username}}** because they had been robbed in the past 10 minutes.",
+    "MASSIVE": "🤑 YOU MANAGED TO STOLE A MASSIVE AMOUNT OF CHUNK!!\nYour payout was **{{cLogo}}{{won}}**.",
+    "DECENT": "💰 You managed to stole a decent amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "SMALL": "💵 You managed to stole a small amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "TINY": "🪙 You managed to stole a tiny amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "CAUGHT": "🚨 YOU GOT CAUGHT!\nYou have been fined **{{cLogo}}{{fine}}**. **{{cLogo}}{{offset}}** has been given to the victim."
 }

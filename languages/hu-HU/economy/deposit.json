@@ -4,6 +4,7 @@
     "EXAMPLES": "{{prefix}}deposit 400",
     "MISSING_AMOUNT": "Kérlek ad meg egy összeget!",
     "NO_CREDIT": "Nincs hiteled a bankba történő befizetésre!",
-    "NO_ENOUGH_CREDIT": "Nincs ennyi kredited: `{{money}}`!",
-    "SUCCESS": "**{{money}}** kredit berakva a bankba!"
+    "NO_ENOUGH_CREDIT": "Nincs ennyi kredited: `{{cLogo}}{{money}}`!",
+    "SUCCESS": "**{{cLogo}}{{money}}** kredit berakva a bankba!",
+    "TOO_LARGE": "Csak {{cLogo}} {{available}} tarthat bankjában. Parancsok futtatásával több bankteret kaphat."
 }

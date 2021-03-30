@@ -46,7 +46,7 @@ class Suggest extends Command {
 		suggChannel.send(embed).then(async (m) => {
 			await m.react(success);
 			await m.react(error);
-		});
+		}).catch(e => message.error(`\`\`\`${e.message}\`\`\``));
 
 		message.success("general/suggest:SUCCESS", {
 			channel: suggChannel.toString()

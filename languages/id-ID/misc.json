@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Ada yang tidak beres... Coba lagi nanti!",
+    "ERR_OCCURRED": "Ada yang salah dengan perintah `{{command}}`... Kesalahan telah dikirim ke server dukungan kami. Silakan coba lagi nanti!",
     "PLEASE_WAIT": "Mohon tunggu sebentar...",
     "COMMAND_DISABLED": "Perintah ini saat ini dinonaktifkan!",
     "TIMES_UP": "Waktu habis! Silakan kirim perintahnya lagi!",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "Kamu harus melaksanakan perintah ini di dalam saluran yang memperbolehkan NSFW!",
     "OWNER_ONLY": "Hanya pemilik Atlanta yang bisa melakukan perintah ini!",
     "COOLDOWNED": "Kamu harus menunggu **{{seconds}}** detik untuk dapat menjalankan perintah ini lagi!",
-    "CANNOT_DM": "Aku tidak punya wewenang untuk mengirimkanmu pesan pribadi... Mohon perbarui pengaturan pribadi kamu!"
+    "CANNOT_DM": "Aku tidak punya wewenang untuk mengirimkanmu pesan pribadi... Mohon perbarui pengaturan pribadi kamu!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

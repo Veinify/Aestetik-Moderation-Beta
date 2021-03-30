@@ -3,12 +3,12 @@
     "USAGE": "{{prefix}}work",
     "EXAMPLES": "{{prefix}}work",
     "COOLDOWN": "Meg kell várnod {{time}}-t, mielőtt újra dolgozni tudsz!",
-    "AWARD": "Töltsd ki az AWARD szót 500 bónusz kredit nyeréséhez!",
+    "AWARD": "Töltsd ki az AWARD szót {{cLogo}}500 bónusz kredit nyeréséhez!",
     "SALARY": "Fizetés",
-    "SALARY_CONTENT": "{{won}} kreditet nyertél!",
+    "SALARY_CONTENT": "{{cLogo}}{{won}} kreditet nyertél!",
     "STREAK": "Csík",
-    "STREAK_CONTENT": "🎉 Nyertél 500 bónusz kreditet!",
+    "STREAK_CONTENT": "🎉 Nyertél {{cLogo}}500 bónusz kreditet!",
     "STREAK_LOST": "Egy napig nem dolgoztál, elvesztetted a munkasorozatot.",
     "WORK_MESSAGE": "A munka elvégzéséhez meg kell mondania az alábbi képen látható betűket.",
-    "WORK_FAIL": "Rossz munka `{{tag}}`. Nem sikerült a feladata. Elvesztette a munkasorozatát, és a mai munkáért {{amount}} összeget kapott."
+    "WORK_FAIL": "Rossz munka `{{tag}}`. Nem sikerült a feladata. Elvesztette a munkasorozatát, és a mai munkáért {{cLogo}}{{amount}} összeget kapott."
 }

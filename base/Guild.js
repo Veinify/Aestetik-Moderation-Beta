@@ -1,7 +1,6 @@
 const mongoose = require("mongoose"),
 	Schema = mongoose.Schema,
-	config = require("../config.js"),
-	languages = require("../languages/language-meta.json");
+	config = require("../config.js");
 
 module.exports = mongoose.model("Guild", new Schema({
 
@@ -13,7 +12,6 @@ module.exports = mongoose.model("Guild", new Schema({
 	members: [{ type: Schema.Types.ObjectId, ref: "Member" }],
 
 	/* CONFIGURATION */
-	language: { type: String, default: languages.find((l) => l.default).name }, // Language of the guild
 	prefix: { type: String, default: config.prefix }, // Default or custom prefix of the guild
 	plugins: { type: Object, default: { // Plugins data
 		// Welcome messages

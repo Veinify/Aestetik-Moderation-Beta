@@ -16,7 +16,7 @@ moment.relativeTimeThreshold("d", 24);
 moment.relativeTimeThreshold("M", 12);
 
 // Creates Atlanta class
-class Atlanta extends Client {
+class AestetikModeration extends Client {
 
 	constructor (options) {
 		super(options);
@@ -333,4 +333,4 @@ class Atlanta extends Client {
 
 }
 
-module.exports = Atlanta;
+module.exports = AestetikModeration;

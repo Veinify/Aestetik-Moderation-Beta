@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Er is iets misgegaan... Probeer het later nog eens!",
+    "ERR_OCCURRED": "Er is iets misgegaan met de opdracht `{{command}}`... De fout is verzonden naar onze ondersteuningsserver. Probeer het later opnieuw!",
     "PLEASE_WAIT": "Wacht een paar seconden...",
     "COMMAND_DISABLED": "Deze opdracht is momenteel uitgeschakeld!",
     "TIMES_UP": "De tijd is om! Stuur de opdracht opnieuw!",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "U moet deze opdracht uitvoeren in een kanaal dat NSFW toestaat!",
     "OWNER_ONLY": "Alleen de eigenaar van GLXY kan deze opdrachten uitvoeren!",
     "COOLDOWNED": "Je moet **{{seconds}}** seconde(n) wachten om deze opdracht opnieuw te kunnen uitvoeren!",
-    "CANNOT_DM": "Ik heb geen toestemming om u privéberichten te sturen... Werk uw privacy-instellingen bij!"
+    "CANNOT_DM": "Ik heb geen toestemming om u privéberichten te sturen... Werk uw privacy-instellingen bij!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

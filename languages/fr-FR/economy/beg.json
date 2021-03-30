@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Priez quelqu'un de vous donner de l'argent (il y a une chance que vous soyez condamné à une amende ou même **mort**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
+    "BEG_LIST": "Choisissez la personne sur qui vous vouliez mendier:\n{{options}}",
+    "TIMED_OUT": "Vous n'en avez pas choisi à temps. Quel est l'intérêt d'exécuter cette commande",
+    "NOT_FOUND": "Cette personne n'est pas sur la liste ????"
+}

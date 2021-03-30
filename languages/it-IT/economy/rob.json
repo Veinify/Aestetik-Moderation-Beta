@@ -1,15 +1,15 @@
 {
-    "DESCRIPTION": "Prova a derubare un membro!",
-    "USAGE": "{{prefix}}rob [@membro] [quantità]",
-    "EXAMPLES": "{{prefix}}rob @Androz#2091 100",
-    "YOURSELF": "Non puoi derubarti!",
-    "MISSING_MEMBER": "Devi specificare un membro valido per rapinare!",
-    "MISSING_AMOUNT": "Si prega di inserire una quantità valida!",
-    "NOT_ENOUGH_AUTHOR": "Devi avere più di **{{moneyMin}}** crediti per tentare questa rapina (per ora hai **{{moneyCurrent}}** crediti)!",
-    "NOT_ENOUGH_MEMBER": "Non puoi tentare la tua rapina perché **{{username}}** non ha tanti crediti in contanti!",
-    "COOLDOWN": "🕵️ **{{username}}** è in guardia... Attendi qualche istante e riprova!",
-    "ROB_WON_1": "🎉 | Congratulazioni! La polizia non è stata abbastanza veloce da fermarti di rubare **{{money}}** crediti a **{{username}}**!",
-    "ROB_WON_2": "😕 | **{{username}}**? Brutte notizie. Ti hanno appena rubato **{{money}}** crediti!",
-    "ROB_LOSE_1": "🚔 | La polizia ti ha sorpreso nell'atto, impossibile negarlo, la tua multa è di **{{fine}}** crediti. **{{offset}}** i crediti di compensazione saranno pagati a **{{username}}**.",
-    "ROB_LOSE_2": "🚓 | Brutte notizie... **{{username}}** ha chiamato la polizia in tempo. La tua multa è di **{{fine}}** crediti e **{{offset}}** i crediti di compensazione saranno pagati a **{{username}}**."
+    "DESCRIPTION": "Try to rob a member!",
+    "USAGE": "{{prefix}}rob [@member]",
+    "EXAMPLES": "{{prefix}}rob @Veinify#1210",
+    "YOURSELF": "You can't rob yourself!",
+    "MISSING_MEMBER": "You must specify a valid member to rob!",
+    "NOT_ENOUGH_AUTHOR": "You need atleast **{{cLogo}}{{moneyMin}}** to try and rob someone!",
+    "NOT_ENOUGH_MEMBER": "You can't rob **{{username}}** because they doesn't have any money in their wallet!",
+    "COOLDOWN": "🕵️ Probably not a good idea to rob **{{username}}** because they had been robbed in the past 10 minutes.",
+    "MASSIVE": "🤑 YOU MANAGED TO STOLE A MASSIVE AMOUNT OF CHUNK!!\nYour payout was **{{cLogo}}{{won}}**.",
+    "DECENT": "💰 You managed to stole a decent amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "SMALL": "💵 You managed to stole a small amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "TINY": "🪙 You managed to stole a tiny amount of chunk!\nYour payout was **{{cLogo}}{{won}}**.",
+    "CAUGHT": "🚨 YOU GOT CAUGHT!\nYou have been fined **{{cLogo}}{{fine}}**. **{{cLogo}}{{offset}}** has been given to the victim."
 }

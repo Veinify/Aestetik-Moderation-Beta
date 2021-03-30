@@ -3,12 +3,12 @@
     "USAGE": "{{prefix}}work",
     "EXAMPLES": "{{prefix}}work",
     "COOLDOWN": "Tekrar çalışmak için {{time}} beklemen gerek!",
-    "AWARD": "Kelime oyununda AWARD Kelimesini tamamla ve 500 bonus kreri kazan!",
+    "AWARD": "Kelime oyununda AWARD Kelimesini tamamla ve {{cLogo}}500 bonus kreri kazan!",
     "SALARY": "Maaş",
-    "SALARY_CONTENT": "{{won}} kredi kazandın!",
+    "SALARY_CONTENT": "{{cLogo}}{{won}} kredi kazandın!",
     "STREAK": "Streak",
-    "STREAK_CONTENT": "🎉 500 bonus kredi kazandın!",
+    "STREAK_CONTENT": "🎉 {{cLogo}}500 bonus kredi kazandın!",
     "STREAK_LOST": "Bir gün çalışmadın, iş serüvenini kaybettin.",
     "WORK_MESSAGE": "İşinizi bitirmek için aşağıdaki resimdeki harfleri söylemeniz gerekiyor.",
-    "WORK_FAIL": "Kötü iş `{{tag}}`. Görevinde başarısız oldun. İş serinizi kaybettiniz ve bugünün çalışması için size {{amount}} verildi."
+    "WORK_FAIL": "Kötü iş `{{tag}}`. Görevinde başarısız oldun. İş serinizi kaybettiniz ve bugünün çalışması için size {{cLogo}}{{amount}} verildi."
 }

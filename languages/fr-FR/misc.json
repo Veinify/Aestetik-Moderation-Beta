@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Quelque chose s'est mal passé... Merci de patienter puis réessayez!",
+    "ERR_OCCURRED": "Une erreur s'est produite avec la commande `{{command}}`... L'erreur a été envoyée à notre serveur d'assistance. Veuillez réessayer plus tard!",
     "PLEASE_WAIT": "Veuillez patienter quelques secondes...",
     "COMMAND_DISABLED": "Cette commande est actuellement désactivée !",
     "TIMES_UP": "Le temps est écoulé ! Veuillez envoyer à nouveau la commande !",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "Vous devez exécuter cette commande dans un salon qui autorise le NSFW !",
     "OWNER_ONLY": "Seul le propriétaire d'Atlanta peut exécuter ces commandes !",
     "COOLDOWNED": "Vous devez attendre **{{seconds}}** seconde(s) pour pouvoir exécuter à nouveau cette commande !",
-    "CANNOT_DM": "Je n'ai pas l'autorisation de vous envoyer des messages privés... Veuillez mettre à jour vos paramètres de confidentialité !"
+    "CANNOT_DM": "Je n'ai pas l'autorisation de vous envoyer des messages privés... Veuillez mettre à jour vos paramètres de confidentialité !",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

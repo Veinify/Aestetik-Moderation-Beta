@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Something went wrong... Please retry again later!",
+    "ERR_OCCURRED": "Something went wrong with the `{{command}}` command... The error has been sent to our support server. Please retry again later!",
     "PLEASE_WAIT": "Aguarda alguns segundos...",
     "COMMAND_DISABLED": "Este comando está desabilitado no momento!",
     "TIMES_UP": "Acabou o tempo! Envia o comando novamente!",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "Deves executar este comando em um canal que permita conteúdo NSFW!",
     "OWNER_ONLY": "Somente o dono de Atlanta pode executar estes comandos!",
     "COOLDOWNED": "Deves esperar **{{seconds}}** segundo(s) para poder executar este comando novamente!",
-    "CANNOT_DM": "Eu não tenho permissão para enviar-te mensagens privadas... Habilite-as nas tuas definições de privacidade!"
+    "CANNOT_DM": "Eu não tenho permissão para enviar-te mensagens privadas... Habilite-as nas tuas definições de privacidade!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

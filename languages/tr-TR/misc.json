@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Birşeyler ters gitti... lütfen daha sonra tekrar deneyin!",
+    "ERR_OCCURRED": "`{{command}}` komutuyla ilgili bir sorun oldu... Hata, destek sunucumuza gönderildi. Lütfen daha sonra tekrar deneyin!",
     "PLEASE_WAIT": "Biraz beklemelisin...",
     "COMMAND_DISABLED": "Bu Komut Devre dışı bırakıldı!",
     "TIMES_UP": "Zaman Dolu! Lütfen komutu tekrar girin.",
@@ -24,5 +24,7 @@
     "NSFW_COMMAND": "NSFW Kanalı değil burası!",
     "OWNER_ONLY": "Bu komut sadece botun sahibi içindir!",
     "COOLDOWNED": "Bu komut kullanmak için **{{seconds}}** saniye beklemen gerek!",
-    "CANNOT_DM": "Mesaj göndermek için yetkim yok... Lütfen bana yetki ver!"
+    "CANNOT_DM": "Mesaj göndermek için yetkim yok... Lütfen bana yetki ver!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
 }

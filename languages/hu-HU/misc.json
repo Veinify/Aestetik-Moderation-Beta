@@ -1,5 +1,5 @@
 {
-    "ERR_OCCURRED": "Valami hiba történt... Kérlek, próbálkozz később!",
+    "ERR_OCCURRED": "VaHiba történt a `{{command}}` paranccsal... A hibát elküldtük támogatási szerverünknek. Kérjük, próbálkozzon újra később!",
     "PLEASE_WAIT": "Kérlek várj egy kevés időt...",
     "COMMAND_DISABLED": "Ez a parancs jelenleg le van tiltva!",
     "TIMES_UP": "Az idő lejárt! Kérlek, küldd el újra a parancsot!",
@@ -24,5 +24,8 @@
     "NSFW_COMMAND": "Ezt a parancsot olyan csatornán lehet végrehajtani, ahol az NSFW be van kapcsolva!",
     "OWNER_ONLY": "Csak Atlanta tulajdonosa tudja végrehajtani ezeket a parancsokat!",
     "COOLDOWNED": "Meg kell várnod a **{{seconds}}** másodpercet, hogy újra elindítsd ezt a parancsot!",
-    "CANNOT_DM": "Nincs engedélyem privát üzenetek küldésére... Kérlek, frissítsd az adatvédelmi beállításaidat!"
+    "CANNOT_DM": "Nincs engedélyem privát üzenetek küldésére... Kérlek, frissítsd az adatvédelmi beállításaidat!",
+    "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
+
 }

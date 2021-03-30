@@ -8,7 +8,7 @@ class Withdraw extends Command {
 			dirname: __dirname,
 			enabled: true,
 			guildOnly: true,
-			aliases: [ "wd" ],
+			aliases: [ "with" ],
 			memberPermissions: [],
 			botPermissions: [ "SEND_MESSAGES", "EMBED_LINKS" ],
 			nsfw: false,
@@ -21,12 +21,12 @@ class Withdraw extends Command {
         
 		let amount = args[0];
 
-		if(!(parseInt(data.memberData.bankSold, 10) > 0)) {
+		if(!(parseInt(data.userData.bankSold, 10) > 0)) {
 			return message.error("economy/withdraw:NO_CREDIT");
 		}
 
 		if(args[0] === "all"){
-			amount = parseInt(data.memberData.bankSold, 10);
+			amount = parseInt(data.userData.bankSold, 10);
 		} else {
 			if(isNaN(amount) || parseInt(amount, 10) < 1){
 				return message.error("economy/withdraw:MISSING_AMOUNT");
@@ -34,18 +34,17 @@ class Withdraw extends Command {
 			amount = parseInt(amount, 10);
 		}
         
-		if(data.memberData.bankSold < amount){
+		if(data.userData.bankSold < amount){
 			return message.error("economy/withdraw:NOT_ENOUGH", {
-				money: amount
+				money: amount.commas()
 			});
 		}
 
-		data.memberData.money = data.memberData.money + amount;
-		data.memberData.bankSold = data.memberData.bankSold - amount;
-		data.memberData.save();
+		data.userData.money += amount;
+		data.userData.bankSold -= amount;
 
 		message.success("economy/withdraw:SUCCESS", {
-			money: amount
+			money: amount.commas()
 		});
 	}
 

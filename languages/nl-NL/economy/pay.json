@@ -6,6 +6,6 @@
     "BOT_USER": "Bots are already rich 💰!",
     "YOURSELF": "Je kunt jezelf niet betalen!",
     "INVALID_AMOUNT": "You must specify a valid amount",
-    "ENOUGH_MONEY": "You can't afford **{{amount}}**",
-    "SUCCESS": "U heeft zojuist **{{amount}}** betaald aan **{{username}}**!"
+    "ENOUGH_MONEY": "You can't afford **{{cLogo}}{{amount}}**",
+    "SUCCESS": "U heeft zojuist **{{cLogo}}{{amount}}** betaald aan **{{username}}**!"
 }

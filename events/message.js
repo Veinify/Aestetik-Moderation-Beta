@@ -1,6 +1,8 @@
 const xpCooldown = {},
 	cmdCooldown = {};
 
+const Notification = require('../base/Notification');
+
 module.exports = class {
 	constructor (client) {
 		this.client = client;
@@ -55,11 +57,10 @@ module.exports = class {
 
 		const userData = await client.findOrCreateUser({ id: message.author.id });
 		data.userData = userData;
-
+		if (message.guild) {
+		    message.author.userData = userData;
+		}
 		if(message.guild){
-
-			await updateXp(message, data);
-
 			if(!message.channel.permissionsFor(message.member).has("MANAGE_MESSAGES") && !message.editedAt){
 				const channelSlowmode = data.guild.slowmode.channels.find((ch) => ch.id === message.channel.id);
 				if(channelSlowmode){
@@ -233,13 +234,21 @@ module.exports = class {
 		}
 
 		try {
-			cmd.run(message, args, data);
+			await cmd.run(message, args, data);
+			updateXp(message, data, this.client);
+			await data.userData.save()
 			if(cmd.help.category === "Moderation" && data.guild.autoDeleteModCommands){
 				message.delete();
 			}
 		} catch(e){
 			console.error(e);
-			return message.error("misc:ERR_OCCURRED");
+			const embed = new Discord.MessageEmbed()
+			.setTitle(`Error occurred on \`${cmd.help.name}\` command.`)
+			.setDescription(`\`\`\`${e.stack}\`\`\``)
+			.errorColor()
+			.setTimestamp();
+			this.client.channels.cache.get(data.config.support.errorLogs).send(embed)
+			return message.error("misc:ERR_OCCURRED", {command: cmd.help.name});
 		}
 	}
 };
@@ -249,11 +258,11 @@ module.exports = class {
  * This function update userdata by adding xp
 */
 
-async function updateXp(msg, data){
+async function updateXp(msg, data, client){
 
 	// Gets the user informations
-	const points = parseInt(data.memberData.exp);
-	const level = parseInt(data.memberData.level);
+	const points = parseInt(data.userData.exp);
+	const level = parseInt(data.userData.level);
 
 	// if the member is already in the cooldown db
 	const isInCooldown = xpCooldown[msg.author.id];
@@ -263,23 +272,36 @@ async function updateXp(msg, data){
 		}
 	}
 	// Records in the database the time when the member will be able to win xp again (1min)
-	const toWait = Date.now()+60000;
+	const toWait = Date.now()+10000;
 	xpCooldown[msg.author.id] = toWait;
     
-	// Gets a random number between 10 and 5 
-	const won = Math.floor(Math.random() * ( Math.floor(10) - Math.ceil(5))) + Math.ceil(5);
+	// Gets a random number between 50 and 80
+	const won = client.functions.randomNum(50, 80);
     
 	const newXp = parseInt(points+won, 10);
 
 	// calculation how many xp it takes for the next new one
-	const neededXp = 5 * (level * level) + 80 * level + 100;
-
+	const newLevel = client.functions.calculateLevel(newXp);
 	// check if the member up to the next level
-	if(newXp > neededXp){
-		data.memberData.level = parseInt(level+1, 10);
+	if(newLevel > level){
+		new Notification(client, data.userData, {
+		    title: 'You have been leveled up!',
+		    message: `Congrats on leveling up to **level ${newLevel}**! You really worked hard for this!`,
+		    category: 'level'
+		})
+	} else if (newLevel < level) {
+	    new Notification(client, data.userData, {
+		    title: 'Your level has been decreased...',
+		    message: `For somewhat reason, your level went down from **level ${level}** to **level ${newLevel}**.`,
+		    category: 'level'
+		})
 	}
 
 	// Update user data
-	data.memberData.exp = parseInt(newXp, 10);
-	await data.memberData.save();
+	data.userData.exp = parseInt(newXp, 10);
+	data.userData.level = parseInt(client.functions.calculateLevel(newXp), 10);
+	
+	// Update bank space for user
+	const bankSpace = Math.floor(1000 * Math.sqrt(data.userData.exp))
+	data.userData.bankSpace = parseInt(bankSpace);
 }

@@ -4,6 +4,7 @@
     "EXAMPLES": "{{prefix}}deposit 400",
     "MISSING_AMOUNT": "Please specify an amount!",
     "NO_CREDIT": "Vous n'avez pas de crédits à déposer à la banque !",
-    "NO_ENOUGH_CREDIT": "Vous n'avez pas `{{money}}` crédits !",
-    "SUCCESS": "**{{money}}** crédits déposés à la banque !"
+    "NO_ENOUGH_CREDIT": "Vous n'avez pas `{{cLogo}}{{money}}` crédits !",
+    "SUCCESS": "**{{cLogo}}{{money}}** crédits déposés à la banque !",
+    "TOO_LARGE": "Vous ne pouvez détenir que {{cLogo}}{{available}} dans votre banque. Vous pouvez obtenir plus d'espaces bancaires en exécutant des commandes."
 }

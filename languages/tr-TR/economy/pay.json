@@ -6,6 +6,6 @@
     "BOT_USER": "Botlar zaten zengin 💰!",
     "YOURSELF": "Kendine para gönderemezsin!",
     "INVALID_AMOUNT": "Lütfen uygun bir miktar girin",
-    "ENOUGH_MONEY": "Bu fiyatı **{{amount}}** karşılayamazsın",
-    "SUCCESS": "Sen **{{amount}}** miktarda parayı **{{username}}** üyesine gönderdin!"
+    "ENOUGH_MONEY": "Bu fiyatı **{{cLogo}}{{amount}}** karşılayamazsın",
+    "SUCCESS": "Sen **{{cLogo}}{{amount}}** miktarda parayı **{{username}}** üyesine gönderdin!"
 }

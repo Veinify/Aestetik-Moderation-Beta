@@ -6,6 +6,6 @@
     "BOT_USER": "Bots are already rich 💰!",
     "YOURSELF": "¡No puedes pagarte a ti mismo!",
     "INVALID_AMOUNT": "You must specify a valid amount",
-    "ENOUGH_MONEY": "You can't afford **{{amount}}**",
-    "SUCCESS": "¡Acaba de pagar **{{amount}}** a **{{username}}**!"
+    "ENOUGH_MONEY": "You can't afford **{{cLogo}}{{amount}}**",
+    "SUCCESS": "¡Acaba de pagar **{{cLogo}}{{amount}}** a **{{username}}**!"
 }

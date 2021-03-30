@@ -6,6 +6,6 @@
     "BOT_USER": "Bot sudah kaya 💰!",
     "YOURSELF": "Kamu tidak dapat membayar dirimu sendiri!",
     "INVALID_AMOUNT": "Kamu harus menentukan jumlah yang valid",
-    "ENOUGH_MONEY": "Kamu tidak mampu membayar **{{amount}}**",
-    "SUCCESS": "Kamu baru membayar **{{amount}}** ke **{{username}}**!"
+    "ENOUGH_MONEY": "Kamu tidak mampu membayar **{{cLogo}}{{amount}}**",
+    "SUCCESS": "Kamu baru membayar **{{cLogo}}{{amount}}** ke **{{username}}**!"
 }

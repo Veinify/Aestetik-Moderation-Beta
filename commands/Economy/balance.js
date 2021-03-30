@@ -34,32 +34,26 @@ class Credits extends Command {
 			return message.error("misc:BOT_USER");
 		}
 
-		const memberData = (message.author === user) ? data.memberData : await this.client.findOrCreateMember({ id: user.id, guildID: message.guild.id }); 
-
-		const commonsGuilds = this.client.guilds.cache.filter((g) => g.members.cache.get(user.id));
-		let globalMoney = 0;
-		await asyncForEach(commonsGuilds.array(), async (guild) => {
-			const memberData = await this.client.findOrCreateMember({ id: user.id, guildID: guild.id });
-			globalMoney+=memberData.money;
-			globalMoney+=memberData.bankSold;
-		});
-
+		const memberData = (message.author === user) ? data.userData : await this.client.findOrCreateUser({ id: user.id, guildID: message.guild.id }); 
+		const bankSpace = memberData.bankSpace;
+		const bankPercentage = ((memberData.bankSold/bankSpace) * 100).toFixed(0); 
+		
 		const embed = new Discord.MessageEmbed()
 			.setAuthor(message.translate("economy/money:TITLE", {
 				username: member.user.username
 			}), member.user.displayAvatarURL())
 			.addField(message.translate("economy/profile:CASH"), message.translate("economy/profile:MONEY", {
-				money: memberData.money
+				money: memberData.money.commas()
 			}), true)
-			.addField(message.translate("economy/profile:BANK"), message.translate("economy/profile:MONEY", {
-				money: memberData.bankSold
+			.addField(message.translate("economy/profile:BANK"), `${message.translate("economy/profile:MONEY", {
+				money: memberData.bankSold.commas()
+			})} / ${bankSpace.commas()} (${bankPercentage}%)`, true)
+			.addField(message.translate("economy/profile:NET_WORTH"), message.translate("economy/profile:MONEY", {
+				money: (memberData.money + memberData.bankSold).commas()
 			}), true)
-			.addField(message.translate("economy/profile:GLOBAL"), message.translate("economy/profile:MONEY", {
-				money: globalMoney
-			}), true)
-			.setColor(this.client.config.embed.color)
-			.setFooter(this.client.config.embed.footer);
-		message.channel.send(embed);
+			.defaultColor()
+			.defaultFooter();
+			message.channel.send(embed);
 	}
 
 }

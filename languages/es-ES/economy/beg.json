@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Pídale a alguien que le dé algo de dinero (existe la posibilidad de que lo multan o incluso que **muera**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
+    "BEG_LIST": "Elige a alguien a quien quisieras suplicar: \n {{options}}",
+    "TIMED_OUT": "No escogiste ninguno a tiempo. ¿Cuál es el punto de ejecutar este comando?",
+    "NOT_FOUND": "Esa persona no está en la lista ????"
+}

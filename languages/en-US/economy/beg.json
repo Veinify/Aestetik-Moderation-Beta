@@ -1,4 +1,7 @@
 {
+    "DESCRIPTION": "Beg someone to give you some money (there is a chance you'll got fined or even **died**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
     "BEG_LIST": "Choose someone you wanted to beg on:\n{{options}}",
     "TIMED_OUT": "You didn't pick any in time. What's the point of running this command",
     "NOT_FOUND": "That person is not on the list????"
