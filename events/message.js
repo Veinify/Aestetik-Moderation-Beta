@@ -9,13 +9,16 @@ module.exports = class {
 	}
 
 	async run (message) {
-
-		const data = {};
-
-		// If the messagr author is a bot
+	    // If the message author is a bot
 		if(message.author.bot){
 			return;
 		}
+	    //Check if the bot is muted / don't have "SEND_MESSAGES" permission that caused DiscordAPIError error
+	    if (message.channel && !message.channel.permissionsFor(this.client.user).has("SEND_MESSAGES")) return message.author.send(message.translate('misc:MISSING_BOT_PERMS', {list: 'SEND_MESSAGES'}))
+	    //if the client is not fully loaded returns
+	    if (!this.client.isReady) return message.error('economy/misc:CLIENT_NOT_READY')
+
+		const data = {};
 
 		// If the member on a guild is invisible or not cached, fetch them.
 		if(message.guild && !message.member){
@@ -225,7 +228,7 @@ module.exports = class {
 			data.userData.achievements.firstCommand.achieved = true;
 			data.userData.markModified("achievements.firstCommand");
 			await data.userData.save();
-			await message.channel.send({ files: [
+			await message.inlineReply({ files: [
 				{
 					name: "unlocked.png",
 					attachment: "./assets/img/achievements/achievement_unlocked2.png"
@@ -242,6 +245,7 @@ module.exports = class {
 			}
 		} catch(e){
 			console.error(e);
+			message.reactError()
 			const embed = new Discord.MessageEmbed()
 			.setTitle(`Error occurred on \`${cmd.help.name}\` command.`)
 			.setDescription(`\`\`\`${e.stack}\`\`\``)

@@ -1,19 +1,20 @@
-const { Guild, Message, MessageEmbed } = require('discord.js');
+const { Guild, Message, MessageEmbed, Util } = require('discord.js');
 const config = require('../config');
 
+var emojis = require('../emojis')
 var cLogo = config.currencyLogo;
 
-Guild.prototype.translate = function(key, args) {
-	const language = this.client.translations.get(this.data.language);
-	if (!language) throw 'Message: Invalid language set in data.';
-	return language(key, args);
-};
 
 Message.prototype.translate = function(key, args = {}) {
 	if (args && typeof args === 'object') args['cLogo'] = cLogo;
-	const language = this.client.translations.get(
-		this.author.userData.settings.language || 'en-US'
-	);
+	let lang = 'en-US'
+	if (this.author.userData) {
+	    if (this.author.userData.settings.language) lang = this.author.userData.settings.language;
+	}
+	let language = this.client.translations.get(lang);
+	//If not found, try using the default language
+	if (!language) language = this.client.translations.get('en-US')
+	//If still no languages found
 	if (!language) throw 'Message: Invalid language set in data.';
 	return language(key, args);
 };
@@ -46,32 +47,54 @@ Message.prototype.sendT = function(key, args = {}, options = {}) {
 
 // Format a date
 Message.prototype.printDate = function(date, format) {
-	return this.client.printDate(date, format, this.guild.data.language);
+    let lang = 'en-US'
+	if (this.author.userData) {
+	    if (this.author.userData.settings.language) lang = this.author.userData.settings.language;
+	}
+	return this.client.printDate(date, format, lang);
 };
 
 // Convert time
 Message.prototype.convertTime = function(time, type, noPrefix) {
+    let lang = 'en-US'
+	if (this.author.userData) {
+	    if (this.author.userData.settings.language) lang = this.author.userData.settings.language;
+	}
 	return this.client.convertTime(
 		time,
 		type,
 		noPrefix,
-		this.guild && this.guild.data ? this.guild.data.language : null
+		lang
 	);
 };
 
+Message.prototype.reactSuccess = function() {
+    const emoji = Util.parseEmoji(emojis['success'])
+    if (!emoji.id) return this;
+    this.react(emoji.id).catch(() => {})
+    return this;
+}
+
+Message.prototype.reactError = function() {
+    const emoji = Util.parseEmoji(emojis['error'])
+    if (!emoji.id) return this;
+    this.react(emoji.id).catch(() => {})
+    return this;
+}
+
 MessageEmbed.prototype.errorColor = function() {
-	this.setColor('#FF0000');
+	this.setColor('#ff5858');
 	return this;
 };
 
 MessageEmbed.prototype.successColor = function() {
-	this.setColor('#32CD32');
+	this.setColor('#19F37F');
 	return this;
 };
 
 MessageEmbed.prototype.waitColor = function() {
-    this.setColor('#FBEF01');
-    return this;
+	this.setColor('#FBEF01');
+	return this;
 };
 
 MessageEmbed.prototype.defaultColor = function() {
@@ -80,8 +103,8 @@ MessageEmbed.prototype.defaultColor = function() {
 };
 
 MessageEmbed.prototype.defaultFooter = function() {
-    this.setFooter(config.embed.footer);
-    return this;
+	this.setFooter(config.embed.footer);
+	return this;
 };
 
 Number.prototype.commas = function() {
@@ -98,4 +121,16 @@ Object.defineProperty(Array.prototype, 'toPages', {
 			})
 		);
 	}
+});
+Object.defineProperty(Object.prototype, 'intoArray', {
+	value: function() {
+		let arr = [];
+		for (const obj of Object.keys(this)) {
+			/*let o = {};
+        o[obj] = this[obj]*/
+			arr.push(this[obj]);
+		}
+		return arr;
+	},
+	writable: true
 });

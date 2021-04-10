@@ -11,7 +11,7 @@ module.exports = class {
 		const client = this.client;
 
 		// Logs some informations using the logger file
-		client.logger.log(`Loading a total of ${client.commands.size} command(s).`, "log");
+		//client.logger.log(`Loading a total of ${client.commands.size} command(s).`, "log");
 		client.logger.log(`${client.user.tag}, ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`, "ready");
 
 		/* DiscordBots.org STATS */
@@ -46,9 +46,8 @@ module.exports = class {
 			else i = 0;
 		}, 20000); // Every 20 seconds
 
-		setTimeout(() => {
-			console.log(chalk.magenta("\n\nLike this bot?"), "Support us by adding a star on GitHub ❤️   https://github.com/Androz2091/AtlantaBot");
-		}, 400);
+        //Marked the client as ready
+		this.client.isReady = true;
 
 	}
 };  

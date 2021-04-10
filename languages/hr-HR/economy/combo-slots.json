@@ -1,0 +1,9 @@
+{
+    "DESCRIPTION": "Similar to real life slot machines. You need a certain amount of symbols to get a certain amount of payouts.",
+    "USAGE": "{{prefix}}combo-slots [amount | table] [table page]",
+    "EXAMPLES": "{{prefix}}combo-slots 1000\n{{prefix}}combo-slots all\n{{prefix}}combo-slots table\n{{prefix}}combo-slots table 2",
+    "tableDescription": "**Only the highest will be paid.**\n**The symbols can be anywhere. Doesn't have to be inline.**",
+    "slotBottom": "\nYou won: **{{cLogo}}{{totalwon}}**\nYour bet: **{{cLogo}}{{amount}}**\nProfit: **{{cLogo}}{{profit}}**\n\nType `{{cmd}} table [page]` to see the table payouts",
+    "bonusDescription": "The spinner will stop in **{{time}} seconds**.",
+    "bonusEnd": "You've won **{{cLogo}}{{won}}** from your bonus spin!"
+}

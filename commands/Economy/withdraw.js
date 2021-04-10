@@ -1,41 +1,34 @@
-const Command = require("../../base/Command.js");
+const Command = require('../../base/Command.js');
 
 class Withdraw extends Command {
-
-	constructor (client) {
+	constructor(client) {
 		super(client, {
-			name: "withdraw",
+			name: 'withdraw',
 			dirname: __dirname,
 			enabled: true,
 			guildOnly: true,
-			aliases: [ "with" ],
+			aliases: ['with'],
 			memberPermissions: [],
-			botPermissions: [ "SEND_MESSAGES", "EMBED_LINKS" ],
+			botPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			nsfw: false,
 			ownerOnly: false,
 			cooldown: 1000
 		});
 	}
 
-	async run (message, args, data) {
-        
+	async run(message, args, data) {
 		let amount = args[0];
-
-		if(!(parseInt(data.userData.bankSold, 10) > 0)) {
-			return message.error("economy/withdraw:NO_CREDIT");
+		amount = this.client.functions.calcAmount(amount, data, false);
+		if (!(parseInt(data.userData.bankSold, 10) > 0)) {
+			return message.error('economy/withdraw:NO_CREDIT');
 		}
 
-		if(args[0] === "all"){
-			amount = parseInt(data.userData.bankSold, 10);
-		} else {
-			if(isNaN(amount) || parseInt(amount, 10) < 1){
-				return message.error("economy/withdraw:MISSING_AMOUNT");
-			}
-			amount = parseInt(amount, 10);
+		if (isNaN(amount) || parseInt(amount, 10) < 1) {
+			return message.error('economy/withdraw:MISSING_AMOUNT');
 		}
-        
-		if(data.userData.bankSold < amount){
-			return message.error("economy/withdraw:NOT_ENOUGH", {
+
+		if (data.userData.bankSold < amount) {
+			return message.error('economy/withdraw:NOT_ENOUGH', {
 				money: amount.commas()
 			});
 		}
@@ -43,11 +36,10 @@ class Withdraw extends Command {
 		data.userData.money += amount;
 		data.userData.bankSold -= amount;
 
-		message.success("economy/withdraw:SUCCESS", {
+		message.success('economy/withdraw:SUCCESS', {
 			money: amount.commas()
 		});
 	}
-
 }
 
 module.exports = Withdraw;

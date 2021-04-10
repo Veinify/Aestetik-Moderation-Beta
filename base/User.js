@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
 	workStreak: { type: Number, default: 0 }, // work streak of the user
 	dailyStreak: { type: Number, default: 0 }, // daily streak of the user
 	bankSold: { type: Number, default: 0 }, // Bank sold of the user
-	bankSpace: { type: Number, default: 0 },
+	bankSpace: { type: Number, default: 0 }, // Amount of money the user can hold in their bank
 	exp: { type: Number, default: 0 }, // Exp points of the user
 	level: { type: Number, default: 0 }, // Level of the user
 

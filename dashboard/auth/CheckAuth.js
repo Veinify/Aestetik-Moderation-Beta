@@ -1,6 +1,6 @@
 const nonsecurePath = require('../nonsecurePath')
 module.exports = async (req, res, next) => {
-	if(nonsecurePath.includes(req.path)) {
+	if(req.path.toLowerCase() === 'ping') {
 	    return next();
 	} else if(req.session.user){
 		return next();

@@ -79,10 +79,9 @@ class Beg extends Command {
 		for (const opt of options) {
 			optmsg.push(`\`${opt}\``);
 		}
-		await message.channel.send(`
-			${message.author}, ${message.translate('economy/beg:BEG_LIST', {
+		await message.inlineReply(`${message.translate('economy/beg:BEG_LIST', {
 			options: optmsg.join(', ')
-		})}`);
+		})}`, { allowedMentions: { repliedUser: false } });
 		const filter = res => {
 			return res.author.id === message.author.id;
 		};
@@ -97,8 +96,8 @@ class Beg extends Command {
 		const chosen = optionslowercase.indexOf(result.toLowerCase());
 
 		if (chosen < 0)
-			return message.channel.send(
-				`${message.author}, ${message.translate('economy/beg:NOT_FOUND')}`
+			return message.inlineReply(
+				`${message.translate('economy/beg:NOT_FOUND')}`
 			);
 		options = options.splice(chosen, 1);
 		const embed = new Discord.MessageEmbed()
@@ -122,7 +121,7 @@ class Beg extends Command {
 		else if (random > 95) payout = 'death';
 		else payout = 'success'; //if somehow it broke
 
-		switch (payout) {
+		switch (payout.toString()) {
 			case 'success':
 				let successarr = answers['success'];
 				embed.setDescription(
@@ -171,12 +170,13 @@ class Beg extends Command {
 					category: this.help.name
 				});
 				data.userData.money = 0;
+				break;
 			default:
-			throw new Error(`Cannot determines if user won or fail (${this.help.name} command`)
+			throw new Error(`Cannot determines if user won or fail. Payout Case: ${payout} (${this.help.name} command)`)
 			break;
 		}
 
-		message.channel.send(message.author, embed);
+		answer.first().inlineReply({ embed: embed, allowedMentions: { repliedUser: false } });
 	}
 }
 

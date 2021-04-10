@@ -1,4 +1,5 @@
 require("./helpers/extenders");
+require('./helpers/MessageReply');
 
 const Sentry = require("@sentry/node"),
 	util = require("util"),
@@ -6,9 +7,11 @@ const Sentry = require("@sentry/node"),
 	readdir = util.promisify(fs.readdir),
 	mongoose = require("mongoose"),
 	chalk = require("chalk")
-	Discord = require('discord.js');
+	Discord = require('discord.js'),
+	config = require("./config"),
+	ms = require('ms'),
+	progress = require('cli-progress');
 
-const config = require("./config");
 if(config.apiKeys.sentryDSN){
 	try {
 		Sentry.init({ dsn: config.apiKeys.sentryDSN });
@@ -28,31 +31,63 @@ const client = new AestetikModeration({
     ws: { intents: intents }, restTimeOffset: 0
 });
 
-const init = async () => {
+const loadingBar = new progress.MultiBar({
+	format: '{bar} | {name} | Current: {current} | {value}/{total} [{percentage}%] | ETA: {eta_formatted}',
+	barsize:10,
+	hideCursor: true,
+	stopOnComplete: true,
+	fps: 100,
+	forceRedraw: false
+}, progress.Presets.shades_classic);
 
+function createLoadingBar(length, name, current) {
+    return loadingBar.create(length, 0, {name: name, current: current})
+}
+
+const init = async () => {
+    client.logger.log('Booting up Aestetik Moderation...', 'Load')
+    let errors = []
+    let now = Date.now();
+    client.logger.log('Loading commands and events...', 'Load')
+    let evtCurrent = 0;
 	// Search for all commands
+	let cmdCurrent = 0;
+	let commandsLength = await getCommandsLength();
+	let eventsLength = await getEventsLength();
+		//Add loading bar
+	const commandBar = createLoadingBar(commandsLength, chalk.cyan.bold('Commands'), '...')
+	const eventBar = createLoadingBar(eventsLength, chalk.greenBright.bold('Events'), '...')
 	const directories = await readdir("./commands/");
-	client.logger.log(`Loading a total of ${directories.length} categories.`, "log");
-	directories.forEach(async (dir) => {
-		const commands = await readdir("./commands/"+dir+"/");
-		commands.filter((cmd) => cmd.split(".").pop() === "js").forEach((cmd) => {
-			const response = client.loadCommand("./commands/"+dir, cmd);
+	for (const dir of directories) {
+		let commandsdir = await readdir("./commands/"+dir+"/");
+		commandsdir = commandsdir.filter((cmd) => cmd.split(".").pop() === "js")
+		for (const cmd of commandsdir) {
+		    cmdCurrent++
+	    await commandBar.update(cmdCurrent, {current: cmd.toString()})
+	    const response = await client.loadCommand(`./commands/${dir}`, cmd);
 			if(response){
-				client.logger.log(response, "error");
+				errors.push(response)
 			}
-		});
-	});
+			}
+	};
 
 	// Then we load events, which will include our message and ready event.
-	const evtFiles = await readdir("./events/");
-	client.logger.log(`Loading a total of ${evtFiles.length} events.`, "log");
-	evtFiles.forEach((file) => {
+	const evtFiles = await readdir("./events/")
+	evtFiles.forEach(async (file) => {
+		evtCurrent++;
 		const eventName = file.split(".")[0];
-		client.logger.log(`Loading Event: ${eventName}`);
+		await eventBar.update(evtCurrent, {current: eventName.toString()})
 		const event = new (require(`./events/${file}`))(client);
 		client.on(eventName, (...args) => event.run(...args));
 		delete require.cache[require.resolve(`./events/${file}`)];
 	});
+	//Give some time for the progress bar to be done
+	await client.wait(2000);
+	for (const err of errors) {
+	    client.logger.log(err, "error");
+	}
+	client.logger.log(`Loaded a total of ${cmdCurrent} commands in ${directories.length} categories.`, "Load");
+	client.logger.log(`Loaded a total of ${evtFiles.length} events.`, "Load");
     
 	client.login(client.config.token); // Log in to the discord api
 
@@ -68,6 +103,8 @@ const init = async () => {
     
 	const autoUpdateDocs = require("./helpers/autoUpdateDocs.js");
 	autoUpdateDocs.update(client);
+	
+	client.logger.log('Aestetik Moderation loaded in {time}!'.replace('{time}', ms(Date.now() - now)), 'Load')
 
 };
 
@@ -82,3 +119,20 @@ client.on("disconnect", () => client.logger.log("Bot is disconnecting...", "warn
 process.on("unhandledRejection", (err) => {
 	console.error(err);
 });
+
+async function getCommandsLength() {
+    const commands = []
+    const directories = await readdir("./commands/");
+	for (const dir of directories) {
+		let commandsdir = await readdir("./commands/"+dir+"/");
+		commandsdir = commandsdir.filter((cmd) => cmd.split(".").pop() === "js")
+		for (const cmd of commandsdir) {
+		    commands.push(cmd)
+		}
+	};
+	return commands.length;
+}
+async function getEventsLength() {
+    const l = (await readdir("./events/")).length;
+    return l
+}

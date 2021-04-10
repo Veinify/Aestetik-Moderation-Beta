@@ -39,7 +39,7 @@ class Eval extends Command {
 				code: "js"
 			});
 		}).catch((err) => {
-			err = err.toString();
+			err = err.stack.toString();
 			if(err.includes(this.client.token)){
 				err = err.replace(this.client.token, "T0K3N");
 			}

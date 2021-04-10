@@ -21,7 +21,7 @@ class Reload extends Command {
 		const command = args[0];
 		const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
 		if(!cmd){
-			message.error("owner/reload:NOT_FOUND", {
+			return message.error("owner/reload:NOT_FOUND", {
 				search: command
 			});
 		}

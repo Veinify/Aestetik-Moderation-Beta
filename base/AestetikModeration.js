@@ -1,12 +1,14 @@
 const { MessageEmbed, Util, Client, Collection } = require("discord.js");
 const { GiveawaysManager } = require("discord-giveaways");
 const { Player } = require("discord-player");
-const { Client: Joker } = require("blague.xyz");
+const requestasync = require('async-request');
+const fml = require('fmylife')
 
 const util = require("util"),
 	AmeClient = require("amethyste-api"),
 	path = require("path"),
-	moment = require("moment");
+	moment = require("moment"),
+	fs = require('fs');
 
 moment.relativeTimeThreshold("s", 60);
 moment.relativeTimeThreshold("ss", 5);
@@ -22,6 +24,7 @@ class AestetikModeration extends Client {
 		super(options);
 		this.config = require("../config"); // Load the config file
 		this.customEmojis = require("../emojis.json"); // load the bot's emojis
+		this.isReady = false; //If the client is fully loaded or not
 		this.languages = require("../languages/language-meta.json"); // Load the bot's languages
 		this.commands = new Collection(); // Creates new commands collection
 		this.aliases = new Collection(); // Creates new command aliases collection
@@ -49,12 +52,13 @@ class AestetikModeration extends Client {
 			this.AmeAPI = new AmeClient(this.config.apiKeys.amethyste);
 		}
 
-		if(this.config.apiKeys.blagueXYZ){
-			this.joker = new Joker(this.config.apiKeys.blagueXYZ, {
-				defaultLanguage: "en"
-			});
+		this.jokes = {
+		    random: async function() {
+		        let joke = await requestasync('https://official-joke-api.appspot.com/jokes/random')
+		        joke = JSON.parse(joke.body);
+		        return { category: joke['type'], question: joke['setup'], answer: joke['punchline'] }
+		    }
 		}
-
 		this.player = new Player(this, {
 			leaveOnEmpty: false
 		});
@@ -182,7 +186,7 @@ class AestetikModeration extends Client {
 	loadCommand (commandPath, commandName) {
 		try {
 			const props = new (require(`.${commandPath}${path.sep}${commandName}`))(this);
-			this.logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
+			//this.logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
 			props.conf.location = commandPath;
 			if (props.init){
 				props.init(this);
@@ -193,6 +197,7 @@ class AestetikModeration extends Client {
 			});
 			return false;
 		} catch (e) {
+		    //fs.writeFileSync('./e.json', e.stack.toString())
 			return `Unable to load command ${commandName}: ${e}`;
 		}
 	}

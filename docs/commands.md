@@ -35,29 +35,32 @@ Here's the list of Atlanta commands. This one contains more than **110 commands*
 | **translate**    | Translate your text!                                              | translate [language] [message] | 8 seconds |
 | **userinfo**     | Shows user information!                                           | userinfo (@user/userID)        | 5 seconds |
 
-### Economy (19 commands)
+### Economy (22 commands)
 
-| Name              | Description                                                                              | Usage                                      | Cooldown   |
-| ----------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------ | ---------- |
-| **achievements**  | Shows your achievements list!                                                            | achievements                               | 1 seconds  |
-| **balance**       | DESCRIPTION                                                                              | USAGE                                      | 1 seconds  |
-| **beg**           | Beg someone to give you some money (there is a chance you'll got fined or even **died**) | beg                                        | 60 seconds |
-| **birthdate**     | Set the birthday date that appear on your profile                                        | birthdate (date)                           | 1 seconds  |
-| **daily**         | Claim your daily money                                                                   | daily                                      | 1 seconds  |
-| **deposit**       | Deposit your money in the bank                                                           | deposit [amount]                           | 1 seconds  |
-| **divorce**       | Divorce the person you are currently married to!                                         | divorce                                    | 3 seconds  |
-| **gamble**        | Try your luck on gambling, you must have a higher number than the opponent.              | gamble                                     | 5 seconds  |
-| **give**          | DESCRIPTION                                                                              | USAGE                                      | 10 seconds |
-| **leaderboard**   | Shows users who have the most credits, levels or reputation points!                      | leaderboard [rep/levels/credits]           | 5 seconds  |
-| **marry**         | Marry someone you love!                                                                  | marry [@member]                            | 10 seconds |
-| **notifications** | Check your notifications                                                                 | notifications [page | view] [notif number] | 3 seconds  |
-| **profile**       | Shows the mentioned user or author profile                                               | profile [user]                             | 3 seconds  |
-| **rep**           | Give a reputation point to someone!                                                      | rep [user]                                 | 3 seconds  |
-| **rob**           | Try to rob a member!                                                                     | rob [@member]                              | 60 seconds |
-| **setbio**        | Change your biography!                                                                   | setbio [biography]                         | 5 seconds  |
-| **slots**         | The Atlanta casino                                                                       | slots [amount]                             | 5 seconds  |
-| **withdraw**      | Withdraw money!                                                                          | withdraw [amount]                          | 1 seconds  |
-| **work**          | Claim your salary!                                                                       | work                                       | 3 seconds  |
+| Name              | Description                                                                                                  | Usage                                      | Cooldown   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------ | ---------- |
+| **achievements**  | Shows your achievements list!                                                                                | achievements                               | 1 seconds  |
+| **balance**       | DESCRIPTION                                                                                                  | USAGE                                      | 1 seconds  |
+| **beg**           | Beg someone to give you some money (there is a chance you'll got fined or even **died**)                     | beg                                        | 60 seconds |
+| **birthdate**     | Set the birthday date that appear on your profile                                                            | birthdate (date)                           | 1 seconds  |
+| **blackjack**     | DESCRIPTION                                                                                                  | USAGE                                      | 5 seconds  |
+| **combo-slots**   | Similar to real life slot machines. You need a certain amount of symbols to get a certain amount of payouts. | combo-slots [amount | table] [table page]  | 5 seconds  |
+| **daily**         | Claim your daily money                                                                                       | daily                                      | 1 seconds  |
+| **deposit**       | Deposit your money in the bank                                                                               | deposit [amount]                           | 1 seconds  |
+| **divorce**       | Divorce the person you are currently married to!                                                             | divorce                                    | 3 seconds  |
+| **fight**         | Bet and fight other user. The winner will win the bet.                                                       | fight [user] [bet amount]                  | 30 seconds |
+| **gamble**        | Try your luck on gambling, you must have a higher number than the opponent.                                  | gamble                                     | 5 seconds  |
+| **give**          | DESCRIPTION                                                                                                  | USAGE                                      | 10 seconds |
+| **leaderboard**   | Shows users who have the most credits, levels or reputation points!                                          | leaderboard [rep/levels/credits]           | 5 seconds  |
+| **marry**         | Marry someone you love!                                                                                      | marry [@member]                            | 10 seconds |
+| **notifications** | Check your notifications                                                                                     | notifications [page | view] [notif number] | 3 seconds  |
+| **profile**       | Shows the mentioned user or author profile                                                                   | profile [user]                             | 3 seconds  |
+| **rep**           | Give a reputation point to someone!                                                                          | rep [user]                                 | 3 seconds  |
+| **rob**           | Try to rob a member!                                                                                         | rob [@member]                              | 60 seconds |
+| **setbio**        | Change your biography!                                                                                       | setbio [biography]                         | 5 seconds  |
+| **slots**         | The Atlanta casino                                                                                           | slots [amount]                             | 5 seconds  |
+| **withdraw**      | Withdraw money!                                                                                              | withdraw [amount]                          | 1 seconds  |
+| **work**          | Claim your salary!                                                                                           | work                                       | 3 seconds  |
 
 ### Administration (18 commands)
 
@@ -139,7 +142,7 @@ Here's the list of Atlanta commands. This one contains more than **110 commands*
 | **skip**    | Skip the current song                             | skip               | 5 seconds |
 | **stop**    | Stop the music                                    | stop               | 5 seconds |
 
-### Fun (10 commands)
+### Fun (9 commands)
 
 | Name          | Description                                                                                   | Usage                           | Cooldown  |
 | ------------- | --------------------------------------------------------------------------------------------- | ------------------------------- | --------- |
@@ -148,7 +151,6 @@ Here's the list of Atlanta commands. This one contains more than **110 commands*
 | **choice**    | Helps you choose between the given choices!                                                   | choice [choice1/choice2/etc...] | 5 seconds |
 | **findwords** | Start a Findwords party, a game where you have to find words!                                 | findwords                       | 5 seconds |
 | **flip**      | I roll the dice for you!                                                                      | flip                            | 1 seconds |
-| **fml**       | Gets a random FML                                                                             | fml                             | 3 seconds |
 | **joke**      | Gets a wonderful joke specially made for you!                                                 | joke                            | 3 seconds |
 | **lmg**       | Generate a LMGTFY link with your search                                                       | lmg [search]                    | 1 seconds |
 | **lovecalc**  | How much love is there between two people?

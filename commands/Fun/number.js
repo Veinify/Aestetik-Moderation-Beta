@@ -65,7 +65,7 @@ class Number extends Command {
 					participants: participants.map(p => `<@${p}>`).join("\n")
 				});
 				message.sendT("fun/number:WON", {
-					winner: msg.author.toString()
+					winner: msg.author.username.toString()
 				});
 				const userdata = await this.client.findOrCreateUser({ id: msg.author.id, guildID: message.guild.id });
 				userdata.money = userdata.money + 10;
@@ -73,16 +73,16 @@ class Number extends Command {
 				collector.stop(msg.author.username);
 			}
 			if (parseInt(msg.content) < number) {
-				message.error("fun/number:BIG", {
-					user: msg.author.toString(),
+				message.inlineReply(message.translate("fun/number:BIG", {
+					user: msg.author.username,
 					number: parsedNumber
-				});
+				}));
 			}
 			if (parseInt(msg.content) > number) {
-				message.error("fun/number:SMALL", {
-					user: msg.author.toString(),
+				message.inlineReply(message.translate("fun/number:SMALL", {
+					user: msg.author.username,
 					number: parsedNumber
-				});
+				}));
 			}
 		});
 

@@ -1,6 +1,7 @@
 {
     "DESCRIPTION": "Gets a random FML",
-    "USAGE": "{{prefix}}fml",
+    "USAGE": "{{prefix}}fml\n{{prefix}}fml search memes\n{{prefix}}fml top day",
     "EXAMPLES": "{{prefix}}fml",
-    "FOOTER": "blague.xyz | By Skiz#0001"
+    "NO_RESULT": "No results found for `{{input}}`!",
+    "TOP_SEARCH": "Available top search input: `day, week, month, year, allTime`"
 }

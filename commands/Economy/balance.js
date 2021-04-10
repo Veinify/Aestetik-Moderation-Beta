@@ -53,7 +53,7 @@ class Credits extends Command {
 			}), true)
 			.defaultColor()
 			.defaultFooter();
-			message.channel.send(embed);
+			message.inlineReply({ embed: embed, allowedMentions: { repliedUser: false } });
 	}
 
 }

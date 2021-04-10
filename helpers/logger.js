@@ -2,6 +2,7 @@
 Logger class for easy and aesthetically pleasing console logging
 */
 const { bgBlue, black, green } = require("chalk");
+const moment = require('moment-timezone')
 
 function dateTimePad(value, digits){
 	let number = value;
@@ -23,7 +24,7 @@ function format(tDate){
 
 module.exports = class Logger {
 	static log (content, type = "log") {
-		const date = `[${format(new Date(Date.now()))}]:`;
+		const date = `[${moment(Date.now()).tz('Asia/Jakarta').locale('id').format('MMMM Do YYYY, h:mm:ss a')}]:`;
 		switch (type) {
 			// Check the message type and then print him in the console
 			case "log": {
@@ -44,7 +45,7 @@ module.exports = class Logger {
 			case "ready": {
 				return console.log(`${date} ${black.bgGreen(type.toUpperCase())} ${content}`);
 			} 
-			default: throw new TypeError("Logger type must be either warn, debug, log, ready, cmd or error.");
+			default: console.log(`${date} ${green.bgRed(type.toUpperCase())} ${content}`);
 		}
 	}
 };

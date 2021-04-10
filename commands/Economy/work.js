@@ -66,7 +66,7 @@ class Work extends Command {
 		.setImage('attachment://captcha.png')
 		.defaultColor()
 		.defaultFooter();
-		await message.reply(workembed);
+		await message.inlineReply(workembed);
 		const filter = res => {
 		    return res.author.id === message.author.id;
 		}
@@ -122,7 +122,7 @@ class Work extends Command {
 
 		data.userData.money += won;
 
-		const messageOptions = { embed };
+		const messageOptions = { embed: embed };
 		if(!data.userData.achievements.work.achieved){
 			data.userData.achievements.work.progress.now += 1;
 			if(data.userData.achievements.work.progress.now === data.userData.achievements.work.progress.total){
@@ -139,7 +139,7 @@ class Work extends Command {
 		}
 		
 		// Send the embed in the current channel
-		await message.channel.send(messageOptions).catch(() => {});
+		await message.inlineReply(messageOptions).catch(() => {});
 
 	}
 

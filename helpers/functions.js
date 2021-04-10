@@ -80,8 +80,9 @@ module.exports = {
 
 	// This function return a random number between min and max
 	randomNum(min, max) {
-		return Math.round( Math.random() * (max - min) + min); 
-
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 
 	convertTime(guild, time) {
@@ -127,5 +128,43 @@ module.exports = {
 	},
 	percentCalc(wonPercent, money) {
 		return parseInt(Math.floor((money * wonPercent) / 100));
+	},
+	calcAmount(amount, data, bet = true, message) {
+		if (typeof amount === 'string' && amount.toLowerCase() === 'all')
+			amount = parseInt(data.userData.money);
+		else if (
+			(typeof amount === 'string' && amount.toLowerCase() === 'max') ||
+			(typeof amount === 'string' && amount.toLowerCase() === 'full')
+		) {
+			if (!bet) amount = parseInt(data.userData.money);
+			if (bet && data.userData.money <= data.config.maxBet)
+				amount = parseInt(data.userData.money);
+			else if (bet && data.userData.money > data.config.maxBet)
+				amount = parseInt(data.config.maxBet);
+		}
+		if (isNaN(amount) || amount < 0) {
+			message.error('misc:INVALID_NUMBER')
+			return false
+		}
+		amount = Math.round(amount);
+		if (amount > data.userData.money) {
+			message.error('economy/slots:NOT_ENOUGH', {
+				money: amount.commas()
+			});
+			return false
+		}
+		if (bet && amount < data.config.minBet) {
+			message.error('misc:GAMBLE_MIN', {
+				min: data.config.minBet.commas()
+			});
+			return false
+		}
+		if (bet && amount > data.config.maxBet) {
+			message.error('misc:GAMBLE_MAX', {
+				max: data.config.maxBet.commas()
+			});
+			return false
+		}
+		return isNaN(Number(amount.toString())) ? parseInt(amount) : Number(amount) 
 	}
 };

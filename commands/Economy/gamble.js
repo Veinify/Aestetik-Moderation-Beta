@@ -26,41 +26,13 @@ class Gamble extends Command {
 		let randomNum = (min, max) => {
 			return this.client.functions.randomNum(min, max);
 		};
-		const emojis = this.client.customEmojis;
+		const emojis = client.customEmojis;
 		const rollingDice = emojis['rolling_dices'];
 		const dices = emojis['dices'];
 
 		let amount = args[0];
-		if (typeof amount === 'string' && amount.toLowerCase() === 'all')
-			amount = data.userData.money;
-		else if (
-			(typeof amount === 'string' && amount.toLowerCase() === 'max') ||
-			(typeof amount === 'string' && amount.toLowerCase() === 'full')
-		) {
-			if (data.userData.money <= data.config.maxBet)
-				amount = data.userData.money;
-			else if (data.userData.money > data.config.maxBet)
-				amount = data.config.maxBet;
-		}
-		if (!amount || isNaN(amount) || amount < 1) {
-			amount = 100;
-		}
-		amount = Math.round(amount);
-		if (amount > data.userData.money) {
-			return message.error('economy/slots:NOT_ENOUGH', {
-				money: amount.commas()
-			});
-		}
-		if (amount < data.config.minBet) {
-			return message.error('misc:GAMBLE_MIN', {
-				min: data.config.minBet.commas()
-			});
-		}
-		if (amount > data.config.maxBet) {
-			return message.error('misc:GAMBLE_MAX', {
-				max: data.config.maxBet.commas()
-			});
-		}
+		amount = this.client.functions.calcAmount(amount, data, true, message);
+		if (!amount) return;
 
 		var userBet = [randomNum(1, 6), randomNum(1, 6)];
 		var botBet = [randomNum(1, 6), randomNum(1, 6)];

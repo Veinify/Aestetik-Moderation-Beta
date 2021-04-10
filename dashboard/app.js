@@ -1,8 +1,6 @@
 const config = require("../config"),
 	utils = require("./utils"),
-	CheckAuth = require("./auth/CheckAuth"),
-	nonsecurePath = require('./nonsecurePath');
-
+	CheckAuth = require("./auth/CheckAuth");
 module.exports.load = async(client) => {
 
 	/* Init express app */
@@ -55,7 +53,7 @@ module.exports.load = async(client) => {
 		.use("/settings", settingsRouter)
 		.use("/", mainRouter)
 		.use(CheckAuth, function(req, res){
-		    if (nonsecurePath.includes(req.path)) return res.send('ping received')
+		    if (req.path.toLowerCase() === 'ping') return res.send('ping received')
 			res.status(404).render("404", {
 				user: req.userInfos,
 				translate: req.translate,

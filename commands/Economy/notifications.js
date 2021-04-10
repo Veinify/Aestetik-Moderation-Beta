@@ -52,8 +52,7 @@ class Notifications extends Command {
 				.setDescription(
 					`Category: \`${notifs.category}\`\n**${notifs.title}**\n\n${
 						notifs.message
-					}\n\nDate:\`${moment(notifs.date).format(
-						'MM/DD/YY'
+					}\n\nDate:\`${message.printDate(notifs.date, 'MMMM Do YYYY, h:mm:ss a'
 					)}\``
 				)
 				.defaultColor()
@@ -66,7 +65,6 @@ class Notifications extends Command {
 				.setDescription(
 					message.translate('economy/notifications:NOTIF_CLEAR_CONFIRM')
 				)
-				.setFooter(this.client.config.embed.footer)
 				.defaultColor()
 				.defaultFooter();
 			message.channel.send(embed);
@@ -108,7 +106,7 @@ class Notifications extends Command {
 		for (let n of notifs) {
 			embed.addField(
 				`${n.place}. ${n.title}`,
-				`${n.message}\n\`${moment(n.date).format('MM/DD/YY')}\``,
+				`${n.message}\n\`${message.printDate(n.date, 'MM/DD/YY')}\``,
 				true
 			);
 		}

@@ -28,7 +28,8 @@ class Pay extends Command {
 		if (member.id === message.author.id) {
 			return message.error('economy/pay:YOURSELF');
 		}
-		const sentAmount = args[1];
+		let sentAmount = args[1];
+		sentAmount = this.client.functions.calcAmount(sentAmount, data, false);
 		if (!sentAmount || isNaN(sentAmount) || parseInt(sentAmount, 10) <= 0) {
 			return message.error('economy/pay:INVALID_AMOUNT', {
 				username: member.user.tag

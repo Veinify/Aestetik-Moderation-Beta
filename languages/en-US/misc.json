@@ -26,5 +26,6 @@
     "COOLDOWNED": "You must wait **{{seconds}}** second(s) to be able to run this command again!",
     "CANNOT_DM": "I don't have permission to send you private messages... Please update your privacy settings",
     "GAMBLE_MAX": "The maximum amount you can bet is **{{cLogo}}{{max}}**.",
-    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**."
+    "GAMBLE_MIN": "The minimum amount you can bet is **{{cLogo}}{{min}}**.",
+    "CLIENT_NOT_READY": "The client is not fully ready. Please wait..."
 }

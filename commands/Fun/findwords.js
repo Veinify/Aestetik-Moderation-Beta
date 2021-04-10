@@ -26,7 +26,10 @@ class FindWords extends Command {
 			return message.error("fun/number:GAME_RUNNING");
 		}
 		// Reads words file
-		const wordList = require("../../assets/json/words/"+message.guild.data.language+".json");
+		let wordList = require("../../assets/json/words/"+message.author.userData.settings.language+".json");
+		wordList = wordList.filter(e => {
+		    return e.length >= 4
+		})
 		
 		// Init some utils variables
 		const participants = [],
@@ -72,21 +75,23 @@ class FindWords extends Command {
 						participants.push(msg.author.id);
 					}
 					if(msg.content.toLowerCase().indexOf(word) >= 0 && wordList.map((word) => word.toLowerCase()).indexOf(msg.content.toLowerCase()) >= 0){
+					    console.log(wordList[wordList.map((word) => word.toLowerCase()).indexOf(msg.content.toLowerCase())])
 						collector.stop(msg.author.id); // Stop the collector
 					} else {
-						msg.error("fun/findwords:INVALID_WORD", {
-							member: msg.author.toString()
-						});
+						msg.inlineReply(msg.translate("fun/findwords:INVALID_WORD", {
+							member: msg.author.username
+						}));
 					}
 				});
     
 				collector.on("end", async (collected, reason) => {
 					if(reason === "time"){
-						message.error("fun/findwords:NO_WINNER");
+					    currentGames[message.guild.id] = false;
+						return message.error("fun/findwords:NO_WINNER");
 					} else {
-						message.success("fun/findwords:WORD_FOUND", {
+						collected.first().inlineReply(message.translate("fun/findwords:WORD_FOUND", {
 							winner: "<@"+reason+">"
-						});
+						}));
 						winners.push(reason);
 					}
 					if(i < nbGames-1) {
