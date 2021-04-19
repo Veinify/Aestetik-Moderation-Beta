@@ -1,6 +1,7 @@
 const xpCooldown = {},
 	cmdCooldown = {};
 
+const {MessageEmbed} = require('discord.js')
 const Notification = require('../base/Notification');
 
 module.exports = class {
@@ -234,6 +235,15 @@ module.exports = class {
 					attachment: "./assets/img/achievements/achievement_unlocked2.png"
 				}
 			]});
+		}
+		
+		if (!client.locations.isSameLocation(data.userData.currentLocation, cmd.conf.requiredLocation)) {
+		    const embed = new MessageEmbed()
+		    .setTitle('Wrong Location!')
+		    .setDescription(`You need to be at **${cmd.conf.requiredLocation.toLowerCase()}** to be able to run this command! You are currently in the **${client.locations.findLocation(data.userData.currentLocation).toLowerCase()}**.\nType \`${prefix}goto [location]\` to go to a different location!`)
+		    .defaultColor()
+		    .defaultFooter();
+		    return message.inlineReply({embed: embed})
 		}
 
 		try {

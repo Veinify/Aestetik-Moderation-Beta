@@ -1,7 +1,7 @@
 const fs = require('fs');
 const fsp = require('fs').promises;
 const path = require('path');
-var source = './languages/en-US/economy/fight.json';
+var source = './languages/en-US/economy/profile.json';
 var target = '/economy/';
 
 let languages;

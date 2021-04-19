@@ -1,0 +1,11 @@
+{
+    "DESCRIPTION": "Play a multiplayer uno game",
+    "USAGE": "{{prefix}}uno",
+    "EXAMPLES": "{{prefix}}uno",
+    "LIST": "All available locations:",
+    "INVALID": "You've provided an invalid location. To see all locations use `{{prefix}}goto list`.",
+    "CONFIRM": "Are you sure you want to travel to **{{destination}}**? This will cost you **{{cLogo}}{{amount}}**.",
+    "NOT_ENOUGH": "You don't have enough money in your wallet to travel to that location. You need atleast **{{cLogo}}{{amount}}**.",
+    "CANCELED": "Alright, looks like you are not going anywhere.",
+    "ARRIVED": "You've finally arrived at your destination! You've traveled total of **{{meter}}** meters from your last location!"
+}

@@ -10,7 +10,7 @@ module.exports = {
 	/* Dashboard configuration */
 	dashboard: {
 		enabled: true, // whether the dashboard is enabled or not
-		secret: "Huw1WLrt9NIrrLS6MBenupTOJvDxrKQo", // Your discord client secret
+		secret: process.env.secret, // Your discord client secret
 		baseURL: "https://Aestetik-Moderation-Beta.mirzabhakti.repl.co", // The base URl of the dashboard
 		logs: "809839545524813865", // The channel ID of logs
 		port: 8080, // Dashboard port
@@ -42,9 +42,9 @@ module.exports = {
 		// FORTNITE TRN: https://fortnitetracker.com/site-api
 		fortniteTRN: process.env.fortniteTRN,
 		// FORTNITE FNBR: https://fnbr.co/api/docs
-		fortniteFNBR: "",
+		fortniteFNBR: process.env.fortniteFNBR,
 		// DBL: https://discordbots.org/api/docs#mybots
-		dbl: "",
+		dbl: process.env.dbl,
 		// AMETHYSTE: https://api.amethyste.moe
 		amethyste: process.env.amethyste,
 		// SENTRY: https://sentry.io (this is not required and not recommended - you can delete the field)
@@ -57,8 +57,8 @@ module.exports = {
 	minBet: 100,
 	/* The others utils links */
 	others: {
-		github: "https://github.com/Androz2091", // Founder's github account
-		donate: "https://patreon.com/Androz2091" // Donate link
+		github: "https://github.com/Veinify", // Founder's github account
+		donate: "https://patreon.com/Veinify" // Donate link
 	},
 	/* The Bot status */
 	status: [

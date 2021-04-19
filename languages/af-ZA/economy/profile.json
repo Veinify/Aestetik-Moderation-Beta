@@ -7,7 +7,7 @@
     "BOT_USER": "Bots don't have profile page!",
     "CASH": "💵 Cash",
     "BANK": "💳 Bank",
-    "NET_WORRH": "🌍 Net Worth",
+    "NET_WORTH": "🌍 Net Worth",
     "MONEY": "**{{cLogo}}{{money}}**",
     "REPUTATION": "🎩 Reputation",
     "REP_POINTS": "**{{points}}** point(s)",
@@ -21,5 +21,7 @@
     "ACHIEVEMENTS": "🔥 Achievements",
     "ACHIEVEMENTS_CONTENT": "Get more information with `{{prefix}}achievements`!",
     "BIO": "🔖 Biography",
-    "YOUR_PROFILE": "Your profile"
+    "YOUR_PROFILE": "Your profile",
+    "LOCATION": "🧭 Current Location",
+    "CURRENT_LOCATION": "You are currently at **{{location}}**"
 }

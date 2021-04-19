@@ -24,6 +24,7 @@ class AestetikModeration extends Client {
 		super(options);
 		this.config = require("../config"); // Load the config file
 		this.customEmojis = require("../emojis.json"); // load the bot's emojis
+		this.locations = require('./Locations.js'); // Load the locations data for economy command
 		this.isReady = false; //If the client is fully loaded or not
 		this.languages = require("../languages/language-meta.json"); // Load the bot's languages
 		this.commands = new Collection(); // Creates new commands collection
@@ -36,7 +37,11 @@ class AestetikModeration extends Client {
 		this.membersData = require("../base/Member"); // Member mongoose model
 		this.logs = require("../base/Log"); // Log mongoose model
 		this.dashboard = require("../dashboard/app"); // Dashboard app
+		//Commands data
 		this.queues = new Collection(); // This collection will be used for the music
+		this.blackjackGame = {} //Used for running multiplayer blackjack command
+		this.unoGame = {}; //Used for running multiplayer uno command
+		
 		this.states = {}; // Used for the dashboard
 		this.knownGuilds = [];
 

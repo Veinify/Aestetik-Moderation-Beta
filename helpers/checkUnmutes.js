@@ -16,6 +16,7 @@ module.exports = {
 		});
 		setInterval(async () => {
 			client.databaseCache.mutedUsers.array().filter((m) => m.mute.endDate <= Date.now()).forEach(async (memberData) => {
+				if (!client.isReady) return;
 				const guild = client.guilds.cache.get(memberData.guildID);
 				if(!guild) return;
 				const member = guild.members.cache.get(memberData.id) || await guild.members.fetch(memberData.id).catch(() => {
@@ -38,13 +39,13 @@ module.exports = {
 				}
 				const user = member ? member.user : await client.users.fetch(memberData.id);
 				const embed = new Discord.MessageEmbed()
-					.setDescription(guild.translate("moderation/unmute:SUCCESS_CASE", {
+					.setDescription(client.translate("moderation/unmute:SUCCESS_CASE", {
 						user: user.toString(),
 						usertag: user.tag,
 						count: memberData.mute.case
 					}))
 					.setColor("#f44271")
-					.setFooter(guild.client.config.embed.footer);
+					.defaultFooter();
 				const channel = guild.channels.cache.get(guildData.plugins.modlogs);
 				if(channel){
 					channel.send(embed);

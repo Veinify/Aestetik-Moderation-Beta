@@ -81,7 +81,7 @@ const init = async () => {
 		client.on(eventName, (...args) => event.run(...args));
 		delete require.cache[require.resolve(`./events/${file}`)];
 	});
-	//Give some time for the progress bar to be done
+	//Due to the progress bar being buggy. Had to delay the code for the bar to be done
 	await client.wait(2000);
 	for (const err of errors) {
 	    client.logger.log(err, "error");
@@ -90,7 +90,7 @@ const init = async () => {
 	client.logger.log(`Loaded a total of ${evtFiles.length} events.`, "Load");
     
 	client.login(client.config.token); // Log in to the discord api
-
+	
 	// connect to mongoose database
 	mongoose.connect(client.config.mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
 		client.logger.log("Connected to the Mongodb database.", "log");

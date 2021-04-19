@@ -125,9 +125,19 @@ Object.defineProperty(Array.prototype, 'toPages', {
 Object.defineProperty(Object.prototype, 'intoArray', {
 	value: function() {
 		let arr = [];
+		for (const [key, value] of Object.entries(this)) {
+			let o = {};
+            o[key] = value
+			arr.push(o);
+		}
+		return arr;
+	},
+	writable: true
+});
+Object.defineProperty(Object.prototype, 'intoArrayValues', {
+	value: function() {
+		let arr = [];
 		for (const obj of Object.keys(this)) {
-			/*let o = {};
-        o[obj] = this[obj]*/
 			arr.push(this[obj]);
 		}
 		return arr;

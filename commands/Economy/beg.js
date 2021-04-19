@@ -2,30 +2,6 @@ const Command = require('../../base/Command.js'),
 	Discord = require('discord.js'),
 	Notification = require('../../base/Notification');
 
-let persons = [
-	'Donald Trump',
-	'Bill Gates',
-	'Elon Musk',
-	'Ariana Grande',
-	'Thanos',
-	'Sans',
-	'Michael Jordan',
-	'Mike Wazowski',
-	'Gordon Ramsay',
-	'Obama',
-	'Robbie Rotten',
-	'Nicki Minaj',
-	'Cardi B',
-	'DaBaby',
-	'Taylor Swift',
-	'Michael Rosen',
-	'Amogus',
-	'imsofate',
-	'LeBron James',
-	'Will Smith',
-	'Jimmy Neutron',
-	'Random Person'
-];
 
 let answers = {
 	success: [
@@ -44,7 +20,7 @@ let answers = {
 		'"nou"'
 	],
 	fined: [
-		'A police has caught you begging on the street. You have been fined **{{amount}} coins**',
+		'A police has caught you begging! You have been fined **{{amount}} coins**',
 		'While walking on the street, you found a little poor dog thats hungry. You went to a Pet Store and bought a food for them for **{{amount}} coins**',
 		'You got tripped by a rock and got your head hurt, you went to the Hospital and paid **{{amount}} coins**'
 	],
@@ -70,6 +46,7 @@ class Beg extends Command {
 	}
 
 	async run(message, args, data) {
+	    var persons = this.client.locations.commonPeople[this.client.locations.findLocation(data.userData.currentLocation,  true)]
 		const cLogo = this.client.config.currencyLogo;
 		let options = getRandom(persons, 3);
 		let optionslowercase = options.map(function(value) {

@@ -98,6 +98,10 @@ class Profile extends Command {
 				true
 			)
 			.addField(
+			    message.translate('economy/profile:LOCATION'),
+			    message.translate('economy/profile:CURRENT_LOCATION', {location: this.client.locations.findLocation(userData.currentLocation).toLowerCase()})
+			)
+			.addField(
 				message.translate('economy/profile:REPUTATION'),
 				message.translate('economy/profile:REP_POINTS', {
 					points: userData.rep.commas()

@@ -17,6 +17,7 @@ module.exports = {
 		setInterval(async function(){
 			const dateNow = Date.now();
 			client.databaseCache.usersReminds.forEach(async (user) => {
+			    if (!client.isReady) return;
 				const dUser = client.users.cache.get(user.id);
 				if(dUser){
 					const reminds = user.reminds;

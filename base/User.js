@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'),
 	Canvas = require('canvas'),
-	languages = require("../languages/language-meta.json");
+	languages = require("../languages/language-meta.json"),
+	locations = require('./Locations.js');
 
 const genToken = () => {
 	let token = '';
@@ -28,6 +29,7 @@ const userSchema = new mongoose.Schema({
 	bankSpace: { type: Number, default: 0 }, // Amount of money the user can hold in their bank
 	exp: { type: Number, default: 0 }, // Exp points of the user
 	level: { type: Number, default: 0 }, // Level of the user
+	currentLocation: { type: Number, default: 0 }, // The current location of the user. See all locations at ./locations.js
 
 	/* NOTIFICATIONS */
 	notifications: { type: Array, default: [] },

@@ -1,0 +1,5 @@
+{
+    "DESCRIPTION": "Play a multiplayer uno game",
+    "USAGE": "{{prefix}}uno",
+    "EXAMPLES": "{{prefix}}uno"
+}

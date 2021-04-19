@@ -6,7 +6,6 @@ var emojis = require('../emojis')['blackjack'];
 /* BJ DATA */
 var suites = ['spade', 'heart', 'diamond', 'clover'];
 var fullCollection = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-var games = {};
 var channels = {};
 class Blackjack {
 	constructor(cmd, data, message, bet) {
@@ -17,8 +16,8 @@ class Blackjack {
 		this.gameId = this.message.author.id;
 		this.channelId = this.message.channel.id;
 		this.bet = parseInt(bet);
-		this.joinmsg = `join`
-		/*The max amount of user per games */
+		this.joinmsg = `blackjack join`
+		/*The max amount of user per this.client.blackjackGame */
 		this.maxUser = 5;
 		/*If the game is canceled or not*/
 		this.canceled = false;
@@ -28,10 +27,10 @@ class Blackjack {
 	async init() {
 		if (channels[this.channelId]) return this.message.inlineReply('There is already an ongoing match in this channel!')
 		//Create join message
-		const embed = new Discord.MessageEmbed().setTitle('BLACKJACK MULTIPLAYER').setDescription(`${this.message.author} is starting a new blackjack game! To join you must type \`${this.joinmsg}\`\nBet: **${this.data.config.currencyLogo}${this.bet.commas()}**.\n\nIf you are the host, type \`start\` to automatically start the game and \`cancel\` to cancel the game.\nThe game will start in **1 minute**.`).defaultColor().defaultFooter();
+		const embed = new Discord.MessageEmbed().setTitle('BLACKJACK MULTIPLAYER').setDescription(`${this.message.author.tag} is starting a new blackjack game! To join you must type \`${this.joinmsg}\`\nBet: **${this.data.config.currencyLogo}${this.bet.commas()}**.\n\nIf you are the host, type \`start\` to automatically start the game and \`cancel\` to cancel the game.\nThe game will start in **1 minute**.`).defaultColor().defaultFooter();
 		await this.message.channel.send(embed)
 		//add a new game data
-		games[this.gameId] = {
+		this.client.blackjackGame[this.gameId] = {
 			players: {},
 			started: false,
 			ended: false
@@ -49,15 +48,15 @@ class Blackjack {
 			var content = msg.content.toLowerCase();
 			if (content === this.joinmsg) {
 				//Adding +1 because the dealer doesn't count.
-				if (this.players.size >= this.max + 1) return msg.inlineReply(`The game is qurrently full! Please wait for someone to leave or wait for the next match!`)
-				if (games[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're already in!")
+				if (this.players.size >= this.max + 1) return msg.inlineReply(`The game is qurrently full! Please wait for others to leave or wait for the next match!`)
+				if (this.client.blackjackGame[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're already in!")
 				const add = await this.addPlayer(msg.member, msg);
 				if (add) return msg.inlineReply('You have joined the multi-player blackjack!\nType \`leave\` to leave the match.')
 			}
 			if (content === 'leave') {
-				if (!games[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're not in the match!")
+				if (!this.client.blackjackGame[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're not in the match!")
 				if (msg.member.id === this.message.author.id) return msg.inlineReply('You are the host and cannot leave the match.')
-				delete games[this.gameId]['players'][msg.member.id];
+				delete this.client.blackjackGame[this.gameId]['players'][msg.member.id];
 				return msg.inlineReply('Successfully left the match.')
 			}
 			if (content === 'start') {
@@ -66,7 +65,7 @@ class Blackjack {
 			}
 			if (content === 'cancel') {
 				if (msg.member.id !== this.message.author.id) return msg.inlineReply(`Only the host can cancel the match!`)
-				delete games[this.gameId];
+				delete this.client.blackjackGame[this.gameId];
 				delete channels[this.channelId];
 				this.canceled = true;
 				this.message.channel.send(`The match has been canceled by the host.`)
@@ -74,8 +73,8 @@ class Blackjack {
 		})
 		collector.on('end', () => {
 			if (this.canceled) return;
-			games[this.gameId]['started'] = true
-			this.message.channel.send(`A game of blackjack has been started with ${this.players.intoArray().length} players!\n${this.players.intoArray().map(p => `• ${p.isDealer ? '**[DEALER]** ' : ''}${p.user}`).join('\n')}`)
+			this.client.blackjackGame[this.gameId]['started'] = true
+			this.message.channel.send(`A game of blackjack has been started with ${this.players.intoArrayValues().length} players!\n${this.players.intoArrayValues().map(p => `• ${p.isDealer ? '**[DEALER]** ' : ''}${p.user}`).join('\n')}`)
 			this.start()
 		})
 	}
@@ -92,7 +91,7 @@ class Blackjack {
 			if (msg) msg.inlineReply(`You don't have enough money! You must have atleast **${this.data.config.currencyLogo}${this.bet.commas()}**.`)
 			return false;
 		}
-		games[this.gameId]['players'][user.id] = {
+		this.client.blackjackGame[this.gameId]['players'][user.id] = {
 			user: user,
 			data: userData,
 			cards: {
@@ -124,19 +123,19 @@ class Blackjack {
 			}, //The reason user won/lose
 			bet: this.bet
 		}
-		//console.log(this.players.intoArray())
+		//console.log(this.players.intoArrayValues())
 		return true
 	}
 	async start() {
 		//Draw cards for everyone
 		await this.drawCardForEveryone()
 		this.msg = await this.message.channel.send(this.createEmbed());
-		const filter = u => games[this.gameId]['players'][u.author.id]
+		const filter = u => this.client.blackjackGame[this.gameId]['players'][u.author.id]
 		const collector = this.message.channel.createMessageCollector(filter, {
 			time: 60000
 		})
 		const timeout = setTimeout(() => {
-			const unfinishedPlayers = this.players.intoArray().filter(function(p) {
+			const unfinishedPlayers = this.players.intoArrayValues().filter(function(p) {
 				if (p.isDealer) return false;
 				if (!p.stand['left'] || p.won['left'] === null) {
 					if (p.split && !p.stand['right'] || p.split && p.won['right'] === null) return true
@@ -198,7 +197,7 @@ class Blackjack {
 				await msg.reactSuccess();
 				await this.msg.edit(this.createEmbed())
 			}
-			const p = this.players.intoArray().filter(e => !e.isDealer)
+			const p = this.players.intoArrayValues().filter(e => !e.isDealer)
 			//Get players that have stands and win/lose the game
 			const finishedPlayer = p.filter(function(p) {
 				if (p.isDealer) return false;
@@ -214,7 +213,7 @@ class Blackjack {
 		})
 		collector.on('end', () => {
 			clearTimeout(timeout)
-			const unfinishedPlayers = this.players.intoArray().filter(function(p) {
+			const unfinishedPlayers = this.players.intoArrayValues().filter(function(p) {
 				if (p.isDealer) return false;
 				if (!p.stand['left'] || p.won['left'] === null) {
 					if (p.split && !p.stand['right'] || p.split && p.won['right'] === null) return true
@@ -223,8 +222,8 @@ class Blackjack {
 				return false;
 			})
 			for (const player of unfinishedPlayers) {
-				games[this.gameId]['players'][player.user.id].stand['left'] = true
-				games[this.gameId]['players'][player.user.id].stand['right'] = true
+				this.client.blackjackGame[this.gameId]['players'][player.user.id].stand['left'] = true
+				this.client.blackjackGame[this.gameId]['players'][player.user.id].stand['right'] = true
 			}
 			this.end();
 		})
@@ -233,7 +232,7 @@ class Blackjack {
 	    let leftHand;
 	    let rightHand;
 		const cLogo = this.data.config.currencyLogo;
-		const players = this.players.intoArray().filter(function(p) {
+		const players = this.players.intoArrayValues().filter(function(p) {
 			if (p.isDealer) return false;
 			//Left hand
 			if (p.stand['left'] && p.won['left'] === null) leftHand = true;
@@ -259,32 +258,32 @@ class Blackjack {
 					const value = player.value[hand].score
 					if (value === 21) {
 						data.money += player.bet;
-						games[this.gameId]['players'][player.user.id].reason[hand] = `You got a blackjack! You won **${cLogo}${player.bet.commas()}**.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = true;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `You got a blackjack! You won **${cLogo}${player.bet.commas()}**.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = true;
 					}
 					else if (botValue > 21) {
 						data.money += player.bet;
-						games[this.gameId]['players'][player.user.id].reason[hand] = `The dealer have busted! You won **${cLogo}${player.bet.commas()}**.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = true;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `The dealer have busted! You won **${cLogo}${player.bet.commas()}**.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = true;
 					}
 					else if (botValue === 21) {
 						data.money -= player.bet;
-						games[this.gameId]['players'][player.user.id].reason[hand] = `The dealer got a blackjack! You lost **${cLogo}${player.bet.commas()}**.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = false;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `The dealer got a blackjack! You lost **${cLogo}${player.bet.commas()}**.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = false;
 					}
 					else if (value > botValue) {
 						data.money += player.bet;
-						games[this.gameId]['players'][player.user.id].reason[hand] = `You got a higher number than the dealer! You won **${cLogo}${player.bet.commas()}**.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = true;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `You got a higher number than the dealer! You won **${cLogo}${player.bet.commas()}**.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = true;
 					}
 					else if (value < botValue) {
 						data.money -= player.bet;
-						games[this.gameId]['players'][player.user.id].reason[hand] = `The dealer got a higher number than yours! You lost **${cLogo}${player.bet.commas()}**.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = false;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `The dealer got a higher number than yours! You lost **${cLogo}${player.bet.commas()}**.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = false;
 					}
 					else if (value === botValue) {
-						games[this.gameId]['players'][player.user.id].reason[hand] = `It's a tie! You lost nothing.`;
-						games[this.gameId]['players'][player.user.id].won[hand] = "tie";
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].reason[hand] = `It's a tie! You lost nothing.`;
+						this.client.blackjackGame[this.gameId]['players'][player.user.id].won[hand] = "tie";
 					}
 				}
 			}
@@ -292,12 +291,11 @@ class Blackjack {
 		}
 		await this.msg.inlineReply(`The game of Blackjack has ended! See the result in the replied message!`)
 		delete channels[this.channelId];
-		delete games[this.gameId];
+		delete this.client.blackjackGame[this.gameId];
 	}
 	createEmbed() {
-		const p = this.players.intoArray().filter(p => !p.isDealer)
+		const p = this.players.intoArrayValues().filter(p => !p.isDealer)
 		//Get players that have stands and win/lose the game
-		//const finishedPlayer = p.filter(p => (p.stand['left'] || (p.split ? p.stand['right'] : true)) || (p.won['left'] !== null || (p.split ? p.won['right'] !== null : true)))
 		const finishedPlayer = p.filter(function(p) {
 			if (p.isDealer) return false;
 			if (p.stand['left'] || p.won['left'] !== null) {
@@ -307,7 +305,7 @@ class Blackjack {
 			return false;
 		})
 		const embed = new Discord.MessageEmbed().setTitle('BLACKJACK MULTIPLAYER').setDescription(`Type \`hit\` to hit, \`stand\` to stand, \`double down\` to double down and \`split\` to split.\n\nThe dealer will hit when everyone stands\nWaiting for (\`${finishedPlayer.length}/${p.length}\`) players.\n\nIf you split your cards, you are now playing with two hands (which is "left" and "right"). To use the commands above you must type the hand of which you want to use on (eg. \`hit left\`).`).defaultColor().defaultFooter();
-		for (const player of this.players.intoArray()) {
+		for (let player of this.players.intoArrayValues()) {
 			let lwonicon = '';
 			if (player.won['left'] === false) lwonicon = this.client.customEmojis['status']['dnd']
 			else if (player.won['left'] === true) lwonicon = this.client.customEmojis['status']['online']
@@ -336,11 +334,11 @@ class Blackjack {
 		return embed;
 	}
 	get players() {
-		if (!games[this.gameId]) return false;
-		return games[this.gameId]['players'];
+		if (!this.client.blackjackGame[this.gameId]) return false;
+		return this.client.blackjackGame[this.gameId]['players'];
 	}
 	drawCardForEveryone() {
-		for (const player of this.players.intoArray()) {
+		for (const player of this.players.intoArrayValues()) {
 			let cards;
 			//If the player is the dealer, they will only get one card.
 			if (player.isDealer) {
@@ -357,27 +355,27 @@ class Blackjack {
 	addUserCard(player, cards, hand = 'left') {
 		var id = player.user.id;
 		if (hand === 'left') {
-			games[this.gameId]['players'][id].cards.left.push(...cards);
-			games[this.gameId]['players'][id].emojis.left = this.players[id].cards.left.map(e => emojis[e.suite][e.value]);
-			games[this.gameId]['players'][id].value.left = this.userValue(this.players[id].cards.left)
+			this.client.blackjackGame[this.gameId]['players'][id].cards.left.push(...cards);
+			this.client.blackjackGame[this.gameId]['players'][id].emojis.left = this.players[id].cards.left.map(e => emojis[e.suite][e.value]);
+			this.client.blackjackGame[this.gameId]['players'][id].value.left = this.userValue(this.players[id].cards.left)
 		}
 		else if (hand === 'right') {
-			games[this.gameId]['players'][id].cards.right.push(...cards);
-			games[this.gameId]['players'][id].emojis.right = this.players[id].cards.right.map(e => emojis[e.suite][e.value]);
-			games[this.gameId]['players'][id].value.right = this.userValue(this.players[id].cards.right)
+			this.client.blackjackGame[this.gameId]['players'][id].cards.right.push(...cards);
+			this.client.blackjackGame[this.gameId]['players'][id].emojis.right = this.players[id].cards.right.map(e => emojis[e.suite][e.value]);
+			this.client.blackjackGame[this.gameId]['players'][id].value.right = this.userValue(this.players[id].cards.right)
 		}
 		return true;
 	}
 	wipeUserCards(player) {
 		var id = player.user.id;
 		//left
-		games[this.gameId]['players'][id].cards.left = [];
-		games[this.gameId]['players'][id].emojis.left = [];
-		games[this.gameId]['players'][id].value.left = 0;
+		this.client.blackjackGame[this.gameId]['players'][id].cards.left = [];
+		this.client.blackjackGame[this.gameId]['players'][id].emojis.left = [];
+		this.client.blackjackGame[this.gameId]['players'][id].value.left = 0;
 		//right
-		games[this.gameId]['players'][id].cards.right = [];
-		games[this.gameId]['players'][id].emojis.right = [];
-		games[this.gameId]['players'][id].value.right = 0;
+		this.client.blackjackGame[this.gameId]['players'][id].cards.right = [];
+		this.client.blackjackGame[this.gameId]['players'][id].emojis.right = [];
+		this.client.blackjackGame[this.gameId]['players'][id].value.right = 0;
 		return true
 	}
 	userValue(cards) {
@@ -401,22 +399,22 @@ class Blackjack {
 		if (total > 21) {
 			//User busted - end game (loss)
 			data.money -= player.bet;
-			games[this.gameId]['players'][member.id].won[hand] = false;
-			games[this.gameId]['players'][member.id].reason[hand] = `You have busted! You lost **${cLogo}${player.bet.commas()}**.`;
+			this.client.blackjackGame[this.gameId]['players'][member.id].won[hand] = false;
+			this.client.blackjackGame[this.gameId]['players'][member.id].reason[hand] = `You have busted! You lost **${cLogo}${player.bet.commas()}**.`;
 			return false;
 		}
 		else if (total === 21) {
 			//User blackjack - end game (win)
 			data.money += player.bet;
-			games[this.gameId]['players'][member.id].won[hand] = true;
-			games[this.gameId]['players'][member.id].reason[hand] = `You got a blackjack! You won **${cLogo}${player.bet.commas()}**.`;
+			this.client.blackjackGame[this.gameId]['players'][member.id].won[hand] = true;
+			this.client.blackjackGame[this.gameId]['players'][member.id].reason[hand] = `You got a blackjack! You won **${cLogo}${player.bet.commas()}**.`;
 			return false;
 		}
 		else if (total <= 21 && player.cards.length >= 5) {
 			//Got 5 cards without busting. User wins
 			data.money += player.bet;
-			games[this.gameId]['players'][member.id].won[hand] = true;
-			games[this.gameId]['players'][member.id].reason[hand] = `You have 5 cards without getting busted! You won **${cLogo}${player.bet.commas()}**.`;
+			this.client.blackjackGame[this.gameId]['players'][member.id].won[hand] = true;
+			this.client.blackjackGame[this.gameId]['players'][member.id].reason[hand] = `You have 5 cards without getting busted! You won **${cLogo}${player.bet.commas()}**.`;
 			return false;
 		}
 		else {
@@ -424,7 +422,7 @@ class Blackjack {
 		}
 	}
 	userStand(member, hand = 'left') {
-		games[this.gameId]['players'][member.id].stand[hand] = true;
+		this.client.blackjackGame[this.gameId]['players'][member.id].stand[hand] = true;
 		return true;
 	}
 	async userDoubledown(member) {
@@ -432,8 +430,8 @@ class Blackjack {
 			id: member.id
 		})
 		if (data.money < this.players[member.id].bet * 2) return 'You don\'t have enough money to double down!'
-		games[this.gameId]['players'][member.id].doubledown = true;
-		games[this.gameId]['players'][member.id].bet *= 2;
+		this.client.blackjackGame[this.gameId]['players'][member.id].doubledown = true;
+		this.client.blackjackGame[this.gameId]['players'][member.id].bet *= 2;
 		const hit = await this.userHit(member)
 		if (hit) this.userStand(member);
 		return;
@@ -443,7 +441,7 @@ class Blackjack {
 			id: member.id
 		})
 		if (data.money < this.players[member.id].bet * 2) return 'You don\'t have enough money to split!'
-		games[this.gameId]['players'][member.id].split = true;
+		this.client.blackjackGame[this.gameId]['players'][member.id].split = true;
 		let lcard = [this.players[member.id].cards.left[0], new Card(this.randCard())];
 		let rcard = [this.players[member.id].cards.left[1], new Card(this.randCard())];
 		//wipe all cards
