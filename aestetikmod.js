@@ -81,6 +81,8 @@ const init = async () => {
 		client.on(eventName, (...args) => event.run(...args));
 		delete require.cache[require.resolve(`./events/${file}`)];
 	});
+	//discord-buttons init
+	require('discord-buttons')(client);
 	//Due to the progress bar being buggy. Had to delay the code for the bar to be done
 	await client.wait(2000);
 	for (const err of errors) {

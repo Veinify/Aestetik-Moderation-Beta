@@ -68,7 +68,7 @@ class Gamble extends Command {
 				.addField(client.user.username, `${rollingDice['1']} ${rollingDice['2']} [?]`)
 				.waitColor()
 				.defaultColor();
-			msg.edit(embed);
+			msg.edit({embed});
 		}
 		function end() {
 			let result = '';
@@ -116,7 +116,7 @@ class Gamble extends Command {
 						.waitColor();
 					break;
 			}
-			msg.edit(embed);
+			msg.edit({embed});
 		}
 	}
 }

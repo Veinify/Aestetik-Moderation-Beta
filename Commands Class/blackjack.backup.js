@@ -1,6 +1,4 @@
 const Discord = require('discord.js');
-const { MessageButton, MessageActionRow } = require("discord-buttons")
-
 var {
 	randomNum
 } = require('../helpers/functions');
@@ -18,177 +16,69 @@ class Blackjack {
 		this.gameId = this.message.author.id;
 		this.channelId = this.message.channel.id;
 		this.bet = parseInt(bet);
+		this.joinmsg = `blackjack join`
 		/*The max amount of user per this.client.blackjackGame */
 		this.maxUser = 5;
 		/*If the game is canceled or not*/
 		this.canceled = false;
-		/*If the match has been started or not*/
-		this.started = false;
-		/*If the match has ended or not*/
-		this.ended = false;
 		/*The blackjack embed message */
 		this.msg = null;
-		/*Blackjack start message*/
-		this.joinmsg = null;
 	}
 	async init() {
 		if (channels[this.channelId]) return this.message.inlineReply('There is already an ongoing match in this channel!')
-
 		//Create join message
-		const embed = new Discord.MessageEmbed().setTitle('BLACKJACK MULTIPLAYER').setDescription(`${this.message.author.tag} is starting a new blackjack game!\nBet: **${this.data.config.currencyLogo}${this.bet.commas()}**.\n\nThe game will start in **1 minute**.`).defaultColor().defaultFooter();
-		this.joinmsg = await this.message.channel.send({embed: embed, components: this.createJoinButton()})
+		const embed = new Discord.MessageEmbed().setTitle('BLACKJACK MULTIPLAYER').setDescription(`${this.message.author.tag} is starting a new blackjack game! To join you must type \`${this.joinmsg}\`\nBet: **${this.data.config.currencyLogo}${this.bet.commas()}**.\n\nIf you are the host, type \`start\` to automatically start the game and \`cancel\` to cancel the game.\nThe game will start in **1 minute**.`).defaultColor().defaultFooter();
+		await this.message.channel.send(embed)
 		//add a new game data
 		this.client.blackjackGame[this.gameId] = {
 			players: {},
+			started: false,
+			ended: false
 		}
 		channels[this.channelId] = true
 		//Add the dealer and the author to the players list
 		await this.addPlayer(this.dealerId);
 		await this.addPlayer(this.message.member);
 		//Start to collect messages
-		const filter = b => !b.clicker.user.bot;
-		const collector = this.joinmsg.createButtonCollector(filter, {
+		const filter = e => !e.author.bot;
+		const collector = this.message.channel.createMessageCollector(filter, {
 			time: 60000
 		})
-		collector.on('collect', async b => {
-			var id = b.id;
-			if (id === 'join') {
+		collector.on('collect', async msg => {
+			var content = msg.content.toLowerCase();
+			if (content === this.joinmsg) {
 				//Adding +1 because the dealer doesn't count.
-				if (this.players.size >= this.max + 1) return b.reply.send(`The game is qurrently full! Please wait for others to leave or wait for the next match!`, {ephemeral: true})
-				if (this.client.blackjackGame[this.gameId]['players'][b.clicker.user.id]) return b.reply.send("You're already in!", {ephemeral: true})
-				const add = await this.addPlayer(b.clicker.user, b);
-				if (add) {
-				    this.message.channel.send(`${b.clicker.user} has joined the blackjack match!`)
-				    return b.reply.send('You have joined the multi-player blackjack!', {ephemeral: true})
-				}
+				if (this.players.size >= this.max + 1) return msg.inlineReply(`The game is qurrently full! Please wait for others to leave or wait for the next match!`)
+				if (this.client.blackjackGame[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're already in!")
+				const add = await this.addPlayer(msg.member, msg);
+				if (add) return msg.inlineReply('You have joined the multi-player blackjack!\nType \`leave\` to leave the match.')
 			}
-			if (id === 'leave') {
-				if (!this.client.blackjackGame[this.gameId]['players'][b.clicker.user.id]) return b.reply.send("You're not in the match!", {ephemeral: true})
-				if (b.clicker.user.id === this.message.author.id) return b.reply.send('You are the host and cannot leave the match.', {ephemeral: true})
-				delete this.client.blackjackGame[this.gameId]['players'][b.clicker.user.id];
-				this.message.channel.send(`${b.clicker.user} has left the blackjack match.`)
-				return b.reply.send('Successfully left the match.', {ephemeral: true})
+			if (content === 'leave') {
+				if (!this.client.blackjackGame[this.gameId]['players'][msg.member.id]) return msg.inlineReply("You're not in the match!")
+				if (msg.member.id === this.message.author.id) return msg.inlineReply('You are the host and cannot leave the match.')
+				delete this.client.blackjackGame[this.gameId]['players'][msg.member.id];
+				return msg.inlineReply('Successfully left the match.')
 			}
-			if (id === 'start') {
-				if (b.clicker.user.id !== this.message.author.id) return b.reply.send('Only the host can start the match!', {ephemeral: true})
-				b.defer(true);
+			if (content === 'start') {
+				if (msg.member.id !== this.message.author.id) return msg.inlineReply('Only the host can start the match!')
 				collector.stop()
 			}
-			if (id === 'cancel') {
-				if (b.clicker.user.id !== this.message.author.id) return b.reply.send(`Only the host can cancel the match!`, {ephemeral: true})
+			if (content === 'cancel') {
+				if (msg.member.id !== this.message.author.id) return msg.inlineReply(`Only the host can cancel the match!`)
 				delete this.client.blackjackGame[this.gameId];
 				delete channels[this.channelId];
 				this.canceled = true;
-				b.defer(true);
-				collector.stop()
 				this.message.channel.send(`The match has been canceled by the host.`)
 			}
 		})
 		collector.on('end', () => {
-			if (!this.canceled) this.started = true;
-			this.joinmsg.edit({embed: embed, components: this.createJoinButton()})
 			if (this.canceled) return;
+			this.client.blackjackGame[this.gameId]['started'] = true
 			this.message.channel.send(`A game of blackjack has been started with ${this.players.intoArrayValues().length} players!\n${this.players.intoArrayValues().map(p => `• ${p.isDealer ? '**[DEALER]** ' : ''}${p.user}`).join('\n')}`)
 			this.start()
 		})
 	}
-	createJoinButton() {
-	    let over = (this.ended || this.started || this.canceled)
-	    const joinb = new MessageButton()
-		.setLabel('Join')
-		.setStyle(over ? 'red' : 'blurple')
-		.setID('join');
-		const leaveb = new MessageButton()
-		.setLabel('Leave')
-		.setStyle(over ? 'red' : 'blurple')
-		.setID('leave')
-		const startb = new MessageButton()
-		.setLabel('Start')
-		.setStyle(over ? 'red' : 'blurple')
-		.setID('start')
-		const cancelb = new MessageButton()
-		.setLabel('Cancel')
-		.setStyle(over ? 'red' : 'blurple')
-		.setID('cancel')
-		if (over) {
-		    joinb.setDisabled();
-		    leaveb.setDisabled();
-		    startb.setDisabled();
-		    cancelb.setDisabled();
-		}
-		const row1 = new MessageActionRow()
-		.addComponent(joinb)
-		.addComponent(leaveb);
-		const row2 = new MessageActionRow()
-		.addComponent(startb)
-		.addComponent(cancelb)
-		return [row1, row2]
-	}
-	createbjbutton() {
-	    let ended = this.ended;
-	    const hitb = new MessageButton()
-		.setLabel('Hit')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('hit');
-		const standb = new MessageButton()
-		.setLabel('Stand')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('stand');
-		const doubleb = new MessageButton()
-		.setLabel('Double Down')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('doubledown');
-		const splitb = new MessageButton()
-		.setLabel('Split')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('split');
-		const splitmsgb = new MessageButton()
-		.setLabel('Splitting Options')
-		.setStyle('grey')
-		.setID('msg')
-		.setDisabled();
-		const lhitb = new MessageButton()
-		.setLabel('Hit Left')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('hit_left');
-		const rhitb = new MessageButton()
-		.setLabel('Hit Right')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('hit_right');
-		const lstandb = new MessageButton()
-		.setLabel('Stand Left')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('stand_left');
-		const rstandb = new MessageButton()
-		.setLabel('Stand Right')
-		.setStyle(ended ? 'red' : 'blurple')
-		.setID('stand_right');
-		if (ended) {
-		    hitb.setDisabled();
-		    standb.setDisabled();
-		    doubleb.setDisabled();
-		    splitb.setDisabled();
-		    lhitb.setDisabled();
-		    rhitb.setDisabled();
-		    lstandb.setDisabled();
-		    rstandb.setDisabled();
-		}
-		const row1 = new MessageActionRow()
-		.addComponent(hitb)
-		.addComponent(standb)
-		.addComponent(doubleb)
-		.addComponent(splitb);
-		const row2 = new MessageActionRow()
-		.addComponent(splitmsgb);
-		const row3 = new MessageActionRow()
-		.addComponent(lhitb)
-		.addComponent(rhitb);
-		const row4 = new MessageActionRow()
-		.addComponent(lstandb)
-		.addComponent(rstandb);
-		return [row1, row2, row3, row4]
-	}
-	async addPlayer(member, button = null) {
+	async addPlayer(member, msg = null) {
 		if (member instanceof Discord.GuildMember || member instanceof Discord.User || member instanceof Discord.ClientUser) member = member.id
 		let {user} = await this.client.resolveMember(member, this.message.guild)
 		if (member === this.dealerId) user = this.client.user;
@@ -198,7 +88,7 @@ class Blackjack {
 		})
 		if (!userData) return false;
 		if (user.id !== this.dealerId && userData.money < this.bet) {
-			if (button) button.reply.send(`You don't have enough money! You must have atleast **${this.data.config.currencyLogo}${this.bet.commas()}**.`, {ephemeral: true})
+			if (msg) msg.inlineReply(`You don't have enough money! You must have atleast **${this.data.config.currencyLogo}${this.bet.commas()}**.`)
 			return false;
 		}
 		this.client.blackjackGame[this.gameId]['players'][user.id] = {
@@ -239,9 +129,9 @@ class Blackjack {
 	async start() {
 		//Draw cards for everyone
 		await this.drawCardForEveryone()
-		this.msg = await this.message.channel.send({embed: this.createEmbed(), components: this.createbjbutton()});
-		const filter = b => this.client.blackjackGame[this.gameId]['players'][b.clicker.user.id]
-		const collector = this.msg.createButtonCollector(filter, {
+		this.msg = await this.message.channel.send(this.createEmbed());
+		const filter = u => this.client.blackjackGame[this.gameId]['players'][u.author.id]
+		const collector = this.message.channel.createMessageCollector(filter, {
 			time: 60000
 		})
 		const timeout = setTimeout(() => {
@@ -253,69 +143,59 @@ class Blackjack {
 				}
 				return false;
 			}).map(p => p.user)
-			if (unfinishedPlayers.length > 0) this.message.channel.send(`${unfinishedPlayers.join(' ')}, You got 10 seconds left to stand. Otherwise you will automatically stands.`)
+			if (unfinishedPlayers.length > 0) this.message.channel.send(`${unfinishedPlayers.join(' ')}, You got 10 seconds left to hit or stand. Otherwise you will automatically stands.`)
 			return
 		}, 50000)
-		collector.on('collect', async b => {
-			const { id } = b;
-			if (id === 'hit') {
-				if (this.players[b.clicker.user.id].split) return b.defer(true);
-				if (this.players[b.clicker.user.id].stand['left'] || this.players[b.clicker.user.id].won['left'] !== null) return b.defer(true);
-				await this.userHit(b.clicker.user, 'left')
-				await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-				b.defer(true);
+		collector.on('collect', async msg => {
+			const args = msg.content.toLowerCase().split(' ');
+			let hand = 'left';
+			if (this.players[msg.member.id].split) {
+				if (args[1] === 'right') hand = 'right';
 			}
-			if (id === "stand") {
-				if (this.players[b.clicker.user.id].split) return b.defer(true);
-				this.userStand(b.clicker.user, "left")
-				await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-				b.defer(true);
+			if (this.players[msg.member.id].stand[hand] || this.players[msg.member.id].won[hand] !== null) return;
+			if (args[0] === 'hit' || args[0] === 'h') {
+				await this.userHit(msg.member, hand)
+				await msg.reactSuccess()
+				await this.msg.edit(this.createEmbed())
 			}
-			if (id === "doubledown") {
-				if (this.players[b.clicker.user.id].split) {
-					return b.reply.send(`You cannot double-down when you split your card.`, {ephemeral: true})
+			if (args[0] === 'stand' || args[0] === 's') {
+				this.userStand(msg.member, hand)
+				await msg.reactSuccess()
+				await this.msg.edit(this.createEmbed())
+			}
+			if (args[0] === 'double down' || args[0] === 'dd') {
+				if (this.players[msg.member.id].split) {
+					await msg.reactError();
+					return await msg.inlineReply(`You cannot double-down when you split your card.`)
 				}
-				if (this.players[b.clicker.user.id].stand['left'] || this.players[b.clicker.user.id].won['left'] !== null) return b.defer(true);
-				if (this.players[b.clicker.user.id].value["left"].score < 9 || this.players[b.clicker.user.id].value["left"].score > 12) {
-					return b.reply.send(`You can only double-down when you have 9-12 total card value.`, {ephemeral: true})
+				if (this.players[msg.member.id].value[hand].score < 9 || this.players[msg.member.id].value[hand].score > 12) {
+					await msg.reactError();
+					return await msg.inlineReply(`You can only double-down when you have 9-12 total card value.`)
 				}
-				let res = await this.userDoubledown(b.clicker.user);
+				let res = await this.userDoubledown(msg.member);
 				if (res) {
-					return b.reply.send(res, {ephemeral: true});
+					await msg.reactError();
+					return await msg.inlineReply(res);
 				}
-				await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-				b.defer(true);
+				await msg.reactSuccess()
+				await this.msg.edit(this.createEmbed())
 			}
-			if (id === "split") {
-				if (this.players[b.clicker.user.id].split) {
-					return await b.reply.send(`You've already split you cards.`, {ephemeral: true})
+			if (args[0] === 'split') {
+				if (this.players[msg.member.id].split) {
+					await msg.reactError()
+					return await msg.inlineReply(`You've already split you cards.`)
 				}
-				if (this.players[b.clicker.user.id].stand['left'] || this.players[b.clicker.user.id].won['left'] !== null) return b.defer(true);
-				if (!this.checkSameValueCard(b.clicker.user)) {
-					return b.reply.send(`You must have 2 cards with the same value to be able to split.`, {ephemeral: true});
+				if (!this.checkSameValueCard(msg.member)) {
+					await msg.reactError();
+					return await msg.inlineReply(`You must have 2 cards with the same value to be able to split.`);
 				}
-				const res = await this.userSplit(b.clicker.user);
+				const res = await this.userSplit(msg.member);
 				if (res) {
-					return b.reply.send(res, {ephemeral: true});
+					await msg.reactError();
+					return await msg.inlineReply(res);
 				}
-				await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-				b.defer(true);
-			}
-			if (id.indexOf('hit_') !== -1) {
-			    let hand = id.replace('hit_', '')
-			    if (!this.players[b.clicker.user.id].split) return b.defer(true)
-			    if (this.players[b.clicker.user.id].stand[hand] || this.players[b.clicker.user.id].won[hand] !== null) return b.defer(true);
-			    await this.userHit(b.clicker.user, hand);
-			    await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-			    b.defer(true);
-			}
-			if (id.indexOf('stand_') !== -1) {
-			    let hand = id.replace('stand_', '')
-			    if (!this.players[b.clicker.user.id].split) return b.defer(true)
-			    if (this.players[b.clicker.user.id].stand[hand] || this.players[b.clicker.user.id].won[hand] !== null) return b.defer(true);
-			    await this.userStand(b.clicker.user, hand);
-			    await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
-			    b.defer(true);
+				await msg.reactSuccess();
+				await this.msg.edit(this.createEmbed())
 			}
 			const p = this.players.intoArrayValues().filter(e => !e.isDealer)
 			//Get players that have stands and win/lose the game
@@ -349,7 +229,6 @@ class Blackjack {
 		})
 	}
 	async end() {
-	    this.ended = true;
 	    let leftHand = {};
 	    let rightHand = {};
 		const cLogo = this.data.config.currencyLogo;
@@ -409,9 +288,7 @@ class Blackjack {
 					}
 				}
 			}
-			await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()});
-		} else {
-		    await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()});
+			await this.msg.edit(this.createEmbed());
 		}
 		await this.msg.inlineReply(`The game of Blackjack has ended! See the result in the replied message!`)
 		delete channels[this.channelId];
@@ -579,7 +456,8 @@ class Blackjack {
 		var player = this.players[member.id];
 		if (player.cards[hand].intoArray().length !== 2) return false;
 		const cards = player.cards[hand].map(c => c.realValue)
-		return (cards[0] === cards[1])
+		if (cards[0] === cards[1]) return true;
+		else return false;
 	}
 	async botHit() {
 		const cLogo = this.data.config.currencyLogo;
@@ -589,7 +467,7 @@ class Blackjack {
 			await this.client.wait(2000)
 			await this.addUserCard(player, [new Card(this.randCard())])
 			total = this.players[player.user.id].value['left'].score;
-			await this.msg.edit({embed: this.createEmbed(), components: this.createbjbutton()})
+			await this.msg.edit(this.createEmbed())
 		}
 	}
 	randCard() {

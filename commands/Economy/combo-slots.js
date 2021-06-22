@@ -308,7 +308,7 @@ class ComboSlots extends Command {
 		//add the slots structure
 		for (let e of emojis) {
 			try {
-				//ignore an element thats not array
+				//ignore element thats not array
 				if (!Array.isArray(e)) return;
 			} finally {
 				msg += `\`||\` ${e.join('  |  ')} \`||\`\n`
@@ -570,7 +570,7 @@ class ComboSlots extends Command {
 		})
 		embed.setDescription(msg);
 		data.userData.money += totalwon;
-		setTimeout(() => {msgembed.edit(embed)}, 1000)
+		setTimeout(() => {msgembed.edit({embed})}, 1000)
 	}
 }
 module.exports = ComboSlots;
@@ -587,7 +587,7 @@ async function bonusSpin(message, data, amount) {
     first = message.client.functions.percentCalc(message.client.functions.randomNum(spinMin, spinMax), amount);
     let embed = cembed();
     embed.defaultColor();
-    msg.edit(`${message.author}`, embed)
+    msg.edit(`${message.author}`, {embed})
     }, 2000)
     setTimeout(() => {
         clearInterval(i);
@@ -599,7 +599,7 @@ async function bonusSpin(message, data, amount) {
         let won = parseInt(second);
         if (isNaN(won)) won = 0;
         data.userData.money += won;
-        msg.edit(embed)
+        msg.edit({embed})
         message.inlineReply(message.translate('economy/combo-slots:bonusEnd', {won: won.commas()}))
     }
     function cembed() {

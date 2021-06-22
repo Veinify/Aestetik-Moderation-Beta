@@ -6,6 +6,7 @@ module.exports = {
 		1: 'STORE',
 		2: 'CASINO',
 		3: 'STREET',
+		4: 'BANK',
 		get HOME() {
 			return 0;
 		},
@@ -18,16 +19,20 @@ module.exports = {
 		get STREET() {
 			return 3;
 		},
+		get BANK() {
+			return 4;
+		},
 		ANY: 'ANY'
 	},
-	
+
 	// How far is the places from the house in meters
 	metersFromHouse: {
-	    0: 0,
-	    1: 468,
-	    2: 1047,
-	    3: 153,
-	    get HOME() {
+		0: 0,
+		1: 468,
+		2: 1047,
+		3: 153,
+		4: 872,
+		get HOME() {
 			return this[0];
 		},
 		get STORE() {
@@ -39,32 +44,41 @@ module.exports = {
 		get STREET() {
 			return this[3];
 		},
-	},
-	
-	// Emojis for all of the locations
-	emojis: {
-	    0: '🏠',
-	    1: allemojis.store,
-	    2: '🎰',
-	    3: '🛣',
-	    get HOME() {
-			return this[0];
-		},
-		get STORE() {
-			return this[1];
-		},
-		get CASINO() {
-			return this[2];
-		},
-		get STREET() {
-			return this[3];
+		get BANK() {
+			return this[4];
 		}
 	},
-	
-	get array() {
-	    return this.list.intoArray().filter(l => isNaN(Object.keys(l)[0]) && !this.isAny(Object.keys(l)[0]))
+
+	// Emojis for all of the locations
+	emojis: {
+		0: '🏠',
+		1: allemojis.store,
+		2: '🎰',
+		3: '🛣',
+		4: '🏦',
+		get HOME() {
+			return this[0];
+		},
+		get STORE() {
+			return this[1];
+		},
+		get CASINO() {
+			return this[2];
+		},
+		get STREET() {
+			return this[3];
+		},
+		get BANK() {
+			return this[4];
+		}
 	},
-	
+
+	get array() {
+		return this.list
+			.intoArray()
+			.filter(l => isNaN(Object.keys(l)[0]) && !this.isAny(Object.keys(l)[0]));
+	},
+
 	commonPeople: {
 		0: [
 			'Dad',
@@ -114,6 +128,15 @@ module.exports = {
 			'Jimmy Neutron',
 			'Random Person'
 		],
+		4: [
+			'Owner',
+			'Manager',
+			'Security',
+			'Janitor',
+			'Random People',
+			'Bank Teller'
+		],
+
 		get HOME() {
 			return this[0];
 		},
@@ -125,9 +148,12 @@ module.exports = {
 		},
 		get STREET() {
 			return this[3];
+		},
+		get BANK() {
+			return this[4];
 		}
 	},
-	
+
 	findLocation(location, toNumber = false) {
 		let val;
 		if (!isNaN(Number(location)) || /^\d+$/.test(location)) {
@@ -143,16 +169,19 @@ module.exports = {
 		return toNumber ? this.list[val] : val;
 	},
 	getDestinationLength(current, destination) {
-	    current = this.findLocation(current, true);
-	    destination = this.findLocation(destination, true);
-	    if (current == null || destination == null) return 0;
-	    return (this.metersFromHouse[current] + this.metersFromHouse[destination]);
+		current = this.findLocation(current, true);
+		destination = this.findLocation(destination, true);
+		if (current == null || destination == null) return 0;
+		return this.metersFromHouse[current] + this.metersFromHouse[destination];
 	},
 	isAny(location) {
 		return (location + '').toUpperCase() === this.list.ANY;
 	},
 	isSameLocation(current, destination) {
-	    if (current == undefined || destination == undefined) return false;
-	    return (this.isAny(destination) || this.findLocation(current) === this.findLocation(destination));
+		if (current == undefined || destination == undefined) return false;
+		return (
+			this.isAny(destination) ||
+			this.findLocation(current) === this.findLocation(destination)
+		);
 	}
 };

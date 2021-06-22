@@ -174,7 +174,7 @@ class Slots extends Command {
 				message.translate('common:DEFEAT').toUpperCase() +
 				'  :::|';
 			embed.setDescription(`\`\`\`${msg}\`\`\``).errorColor();
-			tmsg.edit(embed);
+			tmsg.edit({embed});
 			message.channel.send(
 				message.translate('economy/slots:DEFEAT', {
 					money: amount.commas(),
@@ -209,7 +209,7 @@ class Slots extends Command {
 				.setDescription(`\`\`\`${msg}\`\`\``)
 				.waitColor()
 				.defaultFooter();
-			tmsg.edit('', embed);
+			tmsg.edit('', {embed});
 		}
 	}
 }
