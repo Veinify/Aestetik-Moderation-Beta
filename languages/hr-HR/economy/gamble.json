@@ -1,0 +1,10 @@
+{
+    "DESCRIPTION": "Try your luck on gambling, you must have a higher number than the opponent.",
+    "USAGE": "{{prefix}}gamble",
+    "EXAMPLES": "{{prefix}}gamble 1000\n{{prefix}}gamble all\n{{prefix}}gamble max",
+    "YOUR_TURN": "Your turn to roll the dice...",
+    "BOT_TURN": "{{name}}'s turn to roll the dice...",
+    "WIN": "You have a higher number than the opponent, you won **{{cLogo}}{{amount}}**!",
+    "LOSE": "The opponent have a higher number than yours, you lost **{{cLogo}}{{amount}}**.",
+    "TIE": "You have the same number as the opponent, you lost **{{cLogo}}{{amount}}**."
+}

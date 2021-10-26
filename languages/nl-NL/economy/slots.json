@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Beproef uw geluk en win onze gokautomaat om een mooie beloning te krijgen",
+    "USAGE": "{{prefix}}slots [amount]",
+    "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
+    "DEFEAT": "**{{username}}** gebruikte {{cLogo}}{{money}} credit(s) en verloor alles.",
+    "VICTORY": "**{{username}}** gebruikte {{cLogo}}{{money}} credit(s) en won {{cLogo}}{{won}} credit(s)!",
+    "NOT_ENOUGH": "You need at least **{{cLogo}}{{money}}** credit(s)."
+}

@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Claim your daily money",
+    "USAGE": "{{prefix}}daily",
+    "EXAMPLES": "{{prefix}}daily",
+    "COOLDOWN": "You have to wait {{time}} before claiming your daily again!",
+    "STREAK_LOST": "You haven't claimed your daily for more than a day, you have lost your daily streak.",
+    "DAILY_MESSAGE": "Here is your daily reward, {{username}}.\n\n{{cLogo}}{{amount}} has been added to your wallet."
+}

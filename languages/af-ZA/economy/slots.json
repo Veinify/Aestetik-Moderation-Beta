@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Try your luck and win our slot machine to get a good reward",
+    "USAGE": "{{prefix}}slots [amount]",
+    "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
+    "DEFEAT": "**{{username}}** used {{cLogo}}{{money}} credit(s) and lost everything.",
+    "VICTORY": "**{{username}}** used {{cLogo}}{{money}} credit(s) and won {{cLogo}}{{won}} credit(s)!",
+    "NOT_ENOUGH": "You need at least **{{cLogo}}{{money}}** credit(s)."
+}

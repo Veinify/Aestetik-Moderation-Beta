@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Kérj valakit, hogy adjon neked egy kis pénzt (van esély arra, hogy megbírságolják, vagy akár **meghalt**)",
+    "USAGE": "{{prefix}}beg",
+    "EXAMPLES": "{{prefix}}beg",
+    "BEG_LIST": "Válasszon valakit, akitől könyörögni szeretne:\n{{options}}",
+    "TIMED_OUT": "Nem választott egyet időben. Mi értelme futtatni ezt a parancsot",
+    "NOT_FOUND": "Az a személy nincs a listán????"
+}

@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Şansınızı deneyin ve iyi bir ödül almak için slot makinemizi kazanın",
+    "USAGE": "{{prefix}}slots [amount]",
+    "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
+    "DEFEAT": "**{{username}}** adlı üye {{cLogo}}{{money}} kredi kullandı ve herşeyini kaybetti.",
+    "VICTORY": "**{{username}}** adlı üye {{cLogo}}{{money}} kredi kullandı ve {{cLogo}}{{won}} kredi kazandı!",
+    "NOT_ENOUGH": "Şu kadar kredi **{{cLogo}}{{money}}** lazım yapabilmek için."
+}

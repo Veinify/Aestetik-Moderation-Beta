@@ -1,0 +1,8 @@
+{
+    "DESCRIPTION": "Próbáljon szerencsét, és nyerjen játékgépünket, hogy jó jutalmat kapjon",
+    "USAGE": "{{prefix}}slots [összeg]",
+    "EXAMPLES": "{{prefix}}slots\n{{prefix}}slots 10",
+    "DEFEAT": "**{{username}}** felhasznált {{cLogo}}{{money}} kredited, és mindent elveszített.",
+    "VICTORY": "**{{username}}** felhasznált {{cLogo}}{{money}} kreditet és nyert {{cLogo}}{{won}} kreditet!",
+    "NOT_ENOUGH": "Legalább **{{cLogo}}{{money}}** kreditre van szükséged."
+}

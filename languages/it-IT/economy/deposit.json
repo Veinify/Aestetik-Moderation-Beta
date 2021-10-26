@@ -1,0 +1,10 @@
+{
+    "DESCRIPTION": "Deposita i tuoi soldi in banca",
+    "USAGE": "{{prefix}}deposit [quantità]",
+    "EXAMPLES": "{{prefix}}deposit 400",
+    "MISSING_AMOUNT": "Si prega di specificare una quantità!",
+    "NO_CREDIT": "Non hai credito da depositare in banca!",
+    "NO_ENOUGH_CREDIT": "Non hai `{{cLogo}}{{money}}` crediti!",
+    "SUCCESS": "**{{cLogo}}{{money}}** crediti depositati nella banca!",
+    "TOO_LARGE": "Puoi detenere solo {{cLogo}}{{available}} nella tua banca. Puoi ottenere più spazi bancari eseguendo i comandi."
+}

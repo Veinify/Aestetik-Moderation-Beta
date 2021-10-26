@@ -1,0 +1,12 @@
+{
+    "DESCRIPTION": "Check your notifications",
+    "USAGE": "{{prefix}}notifications [page | view] [notif number]",
+    "EXAMPLES": "{{prefix}}notifications\n{{prefix}}notifications 2\n{{prefix}}notifications view 3",
+    "PAGE_NOT_EXIST": "Hey mate, that page doesn't exist at all",
+    "PAGE_DESCRIPTION": "Type **{{prefix}}notifications [page]** to load more notifications.\nType **{{prefix}}notifications view [notification number]** to see more details about specific notification.\nType **{{prefix}}notifications clear** to clear your notifications.",
+    "NO_NOTIFICATION": "You currently have no notifications.",
+    "NOTIF_NOT_EXIST": "That notification number doesn't exist. To see your notification numbers, Use **{{prefix}}notifications** command.",
+    "NOTIF_CLEAR_CONFIRM": "⚠️ Are you sure you want to clear your notifications? This will **DELETE** all of your notifications and cannot be undone.\nType `YES` to continue.",
+    "NOTIF_CLEAR_FAIL": "Alright, looks like we aren't gonna clear your notifications.",
+    "NOTIF_CLEAR_SUCCESS": "Successfully cleared **{{amount}}** amount of notifications from you."
+}
